@@ -1,13 +1,13 @@
-
+ï»¿
 namespace Common_Gravity_Puzzle
 {
     /// <summary>
-    /// ‹¤’Ê’è”
+    /// å…±é€šå®šæ•°
     /// </summary>
     public static class GrovalConst_Gravity_Puzzle
     {
         /// <summary>
-        /// ‰æ–ÊID
+        /// ç”»é¢ID
         /// </summary>
         public enum Screen_ID
         { 
@@ -19,7 +19,7 @@ namespace Common_Gravity_Puzzle
         }
 
         /// <summary>
-        /// ƒ{ƒ^ƒ“ID
+        /// ãƒœã‚¿ãƒ³ID
         /// </summary>
         public enum Button_ID
         {
@@ -27,41 +27,67 @@ namespace Common_Gravity_Puzzle
             NEXT,
             REPLAY,
             TITLE,
+            START,
         }
 
         /// <summary>
-        /// ƒQ[ƒ€‚Ìó‘Ô
+        /// ã‚²ãƒ¼ãƒ ã®çŠ¶æ…‹
         /// </summary>
         public enum GameState
         {
-            READY,          //‘Ò‹@
-            CREATING_STAGE, //ƒXƒe[ƒW¶¬
-            PLAYING,        //ƒQ[ƒ€ƒvƒŒƒC
-            GAMECLEAR,      //ƒQ[ƒ€ƒNƒŠƒA
-            GAMEOVER,       //ƒQ[ƒ€ƒI[ƒo[
+            READY,          //å¾…æ©Ÿ
+            CREATING_STAGE, //ã‚¹ãƒ†ãƒ¼ã‚¸ç”Ÿæˆ
+            PLAYING,        //ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤
+            GAMECLEAR,      //ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢
+            GAMEOVER,       //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
         }
 
+        //ãƒ•ãƒªãƒƒã‚¯ID
+        public enum Flick_ID
+        {
+            NONE = -1,
+            RIGHT,
+            LEFT,
+            UP,
+            DOWN, 
+        }
+
+        public enum Obj_ID
+        {
+            NONE,       
+            PLAYER,     //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+            BALLOON,    //é¢¨èˆ¹
+            BLOCK,      //ãƒ–ãƒ­ãƒƒã‚¯
+            DOOR,       //ãƒ‰ã‚¢
+            BOX,        //ç®±
+            SPIKE_BALL, //ãƒˆã‚²ãƒœãƒ¼ãƒ«
+            RIGHT_SPIKE,//å³å‘ãã®ãƒˆã‚²
+            LEFT_SPIKE, //å·¦å‘ãã®ãƒˆã‚²
+            UP_SPIKE,   //ä¸Šå‘ãã®ãƒˆã‚²
+            DOWN_SPIKE, //ä¸‹å‘ãã®ãƒˆã‚²
+        }
     }
     
     /// <summary>
-    /// ‹¤’Ê•Ï”
+    /// å…±é€šå¤‰æ•°
     /// </summary>
     public static class GrovalNum_Gravity_Puzzle
     {
-        //Œ»İ‚Ì‰æ–ÊID
+        //ç¾åœ¨ã®ç”»é¢ID
         public static GrovalConst_Gravity_Puzzle.Screen_ID gNOW_SCREEN_ID = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
 
-        //Œ»İ‚ÌƒtƒF[ƒYó‘Ô
+        //ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºçŠ¶æ…‹
         public static GrovalConst_Gravity_Puzzle.GameState gNOW_GAMESTATE;
 
-        //Œ»İ‚ÌƒXƒe[ƒWƒŒƒxƒ‹
+        //ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ¬ãƒ™ãƒ«
         public static int gNOW_STAGE_LEVEL = 1;
 
-        //ŠeƒXƒNƒŠƒvƒg
+        //å„ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
         public static Game_Manager_Gravity_Puzzle sGameManager;
         public static Game_Preference_Gravity_Puzzle sGamePreference;
         public static Image_Manager_Gravity_Puzzle sImageManager;
         public static Screen_Change_Gravity_Puzzle sScreenChange;
         public static Click_Manager_Gravity_Puzzle sClickManager;
+        public static Csv_Roader_Gravity_Puzzle sCsvRoader;
     }
 }

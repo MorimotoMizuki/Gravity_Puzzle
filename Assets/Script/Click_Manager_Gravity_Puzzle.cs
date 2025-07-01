@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Common_Gravity_Puzzle;
 using UnityEditor;
@@ -6,41 +6,43 @@ using UnityEngine;
 
 public class Click_Manager_Gravity_Puzzle : MonoBehaviour
 {
-    //ƒ{ƒ^ƒ“ƒNƒŠƒbƒN‰Â”Ûƒtƒ‰ƒO
-    [HideInInspector]
-    public bool[] _Is_Button;
+    //ãƒœã‚¿ãƒ³ã‚¯ãƒªãƒƒã‚¯å¯å¦ãƒ•ãƒ©ã‚°
+    [HideInInspector] public bool[] _Is_Button;
 
-    //ƒXƒNƒŠ[ƒ“ƒNƒŠƒbƒN‰Â”Ûƒtƒ‰ƒO
-    [HideInInspector]
-    public bool _Is_Title_Screen_Click = false;
+    //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚¯ãƒªãƒƒã‚¯å¯å¦ãƒ•ãƒ©ã‚°
+    [HideInInspector] public bool _Is_Title_Screen_Click = false;
     private bool _Is_Title_First = true;
 
-    //ƒNƒŠƒbƒNƒtƒ‰ƒO
-    private bool _Is_Touch_or_Click_down;   //ƒNƒŠƒbƒN‚Ü‚½‚Íƒ^ƒbƒ`‚ªŠJn‚³‚ê‚½uŠÔ
-    private bool _Is_Touch_or_Click_up;     //ƒNƒŠƒbƒN‚Ü‚½‚Íƒ^ƒbƒ`‚ªI—¹‚µ‚½uŠÔ
-    private bool _Is_Touch_or_Click_active; //ƒNƒŠƒbƒN‚Ü‚½‚Íƒ^ƒbƒ`‚ªŒp‘±‚µ‚Ä‚¢‚éŠÔ(ƒhƒ‰ƒbƒO’†)
+    //ãƒ•ãƒªãƒƒã‚¯é–¢ä¿‚ãƒ•ãƒ©ã‚°
+    [HideInInspector] public bool _Is_flick_start = false;  //ãƒ•ãƒªãƒƒã‚¯ã‚¹ã‚¿ãƒ¼ãƒˆ
+    [HideInInspector] public bool _Is_flick_end = false;    //ãƒ•ãƒªãƒƒã‚¯ã‚¨ãƒ³ãƒ‰
+
+    //ã‚¯ãƒªãƒƒã‚¯ãƒ•ãƒ©ã‚°
+    private bool _Is_Touch_or_Click_down;   //ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚¿ãƒƒãƒãŒé–‹å§‹ã•ã‚ŒãŸç¬é–“
+    private bool _Is_Touch_or_Click_up;     //ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚¿ãƒƒãƒãŒçµ‚äº†ã—ãŸç¬é–“
+    private bool _Is_Touch_or_Click_active; //ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚¿ãƒƒãƒãŒç¶™ç¶šã—ã¦ã„ã‚‹é–“(ãƒ‰ãƒ©ãƒƒã‚°ä¸­)
 
     // Start is called before the first frame update
     void Start()
     {
-        _Is_Button = new bool[4];
+        _Is_Button = new bool[5];
     }
 
     // Update is called once per frame
     void Update()
     {
-        //ƒNƒŠƒbƒN‚Ü‚½‚Íƒ^ƒbƒ`‚ªŠJn‚³‚ê‚½uŠÔi‰Ÿ‚µn‚ßj‚ğŒŸo‚·‚é
+        //ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚¿ãƒƒãƒãŒé–‹å§‹ã•ã‚ŒãŸç¬é–“ï¼ˆæŠ¼ã—å§‹ã‚ï¼‰ã‚’æ¤œå‡ºã™ã‚‹
         _Is_Touch_or_Click_down = Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
-        //ƒNƒŠƒbƒN‚Ü‚½‚Íƒ^ƒbƒ`‚ªI—¹‚µ‚½uŠÔi—£‚µ‚½j‚ğŒŸo‚·‚é
+        //ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚¿ãƒƒãƒãŒçµ‚äº†ã—ãŸç¬é–“ï¼ˆé›¢ã—ãŸï¼‰ã‚’æ¤œå‡ºã™ã‚‹
         _Is_Touch_or_Click_up = Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended);
-        //ƒNƒŠƒbƒN‚Ü‚½‚Íƒ^ƒbƒ`‚ªŒp‘±‚µ‚Ä‚¢‚éŠÔiƒhƒ‰ƒbƒO’†j‚ğŒŸo‚·‚é
+        //ã‚¯ãƒªãƒƒã‚¯ã¾ãŸã¯ã‚¿ãƒƒãƒãŒç¶™ç¶šã—ã¦ã„ã‚‹é–“ï¼ˆãƒ‰ãƒ©ãƒƒã‚°ä¸­ï¼‰ã‚’æ¤œå‡ºã™ã‚‹
         _Is_Touch_or_Click_active = Input.GetMouseButton(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved);
 
         switch(GrovalNum_Gravity_Puzzle.gNOW_SCREEN_ID)
         {
                 case GrovalConst_Gravity_Puzzle.Screen_ID.TITLE:
                 {
-                    //‰æ–ÊƒNƒŠƒbƒN”»’è
+                    //ç”»é¢ã‚¯ãƒªãƒƒã‚¯åˆ¤å®š
                     if(_Is_Touch_or_Click_down && _Is_Title_First)
                     {
                         _Is_Title_Screen_Click = true;
@@ -50,55 +52,86 @@ public class Click_Manager_Gravity_Puzzle : MonoBehaviour
                 }
                 case GrovalConst_Gravity_Puzzle.Screen_ID.GAME:
                 {
-                    //‘½dƒNƒŠƒbƒN‚ğ–h‚®ˆ— : ƒtƒ‰ƒO‰Šú‰»
+                    //å¤šé‡ã‚¯ãƒªãƒƒã‚¯ã‚’é˜²ãå‡¦ç† : ãƒ•ãƒ©ã‚°åˆæœŸåŒ–
                     if (!_Is_Title_First)
                         _Is_Title_First = true;
+
+                    //ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤ä¸­ä»¥å¤–ã¯çµ‚äº†
+                    if (GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE != GrovalConst_Gravity_Puzzle.GameState.PLAYING)
+                        break;
+
+                    //ãƒ•ãƒªãƒƒã‚¯å‡¦ç†
+                    if(_Is_Touch_or_Click_down)
+                    {
+                        _Is_flick_start = true; //å§‹ç‚¹
+                    }
+                    if(_Is_Touch_or_Click_up)
+                    {
+                        _Is_flick_end = true;   //çµ‚ç‚¹
+                    }
 
                     break;
                 }
         }
 
-        //ƒGƒXƒP[ƒvƒL[“ü—Í
+        //ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚­ãƒ¼å…¥åŠ›
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            QuitGame();  //ƒQ[ƒ€I—¹
+            QuitGame();  //ã‚²ãƒ¼ãƒ çµ‚äº†
         }
 
     }
 
-    //ƒlƒNƒXƒgƒ{ƒ^ƒ“ : ƒNƒŠƒA‰æ–Ê
+    //ãƒã‚¯ã‚¹ãƒˆãƒœã‚¿ãƒ³ : ã‚¯ãƒªã‚¢ç”»é¢
     public void Button_Clicked_Next()
     {
-        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.NEXT] = true;                   //ƒ{ƒ^ƒ“ƒtƒ‰ƒOtrue
+        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.NEXT] = true;      //ãƒœã‚¿ãƒ³ãƒ•ãƒ©ã‚°true
     }
-    //ƒŠƒvƒŒƒCƒ{ƒ^ƒ“ : ƒQ[ƒ€ƒI[ƒo[‰æ–Ê
+    //ãƒªãƒ—ãƒ¬ã‚¤ãƒœã‚¿ãƒ³ : ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢
     public void Button_Clicked_Replay()
     {
-        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.REPLAY] = true;                 //ƒ{ƒ^ƒ“ƒtƒ‰ƒOtrue
+        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.REPLAY] = true;    //ãƒœã‚¿ãƒ³ãƒ•ãƒ©ã‚°true
     }
-    //ƒ^ƒCƒgƒ‹ƒ{ƒ^ƒ“ : ƒQ[ƒ€ƒI[ƒo[‰æ–Ê
+    //ã‚¿ã‚¤ãƒˆãƒ«ãƒœã‚¿ãƒ³ : ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢
     public void Button_Clicked_Title()
     {
-        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.TITLE] = true;                  //ƒ{ƒ^ƒ“ƒtƒ‰ƒOtrue
+        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.TITLE] = true;     //ãƒœã‚¿ãƒ³ãƒ•ãƒ©ã‚°true
     }
-    //ƒMƒuƒAƒbƒvƒ{ƒ^ƒ“ : ƒQ[ƒ€‰æ–Ê
+    //ã‚®ãƒ–ã‚¢ãƒƒãƒ—ãƒœã‚¿ãƒ³ : ã‚²ãƒ¼ãƒ ç”»é¢
     public void Button_Clicked_GiveUp()
     {
-        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP] = true;                  //ƒ{ƒ^ƒ“ƒtƒ‰ƒOtrue
+        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP] = true;    //ãƒœã‚¿ãƒ³ãƒ•ãƒ©ã‚°true
+    }
+    //ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ : ã‚²ãƒ¼ãƒ ç”»é¢
+    public void Button_Clicked_Start()
+    {
+        _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.START] = true;     //ãƒœã‚¿ãƒ³ãƒ•ãƒ©ã‚°true
     }
 
     /// <summary>
-    /// ƒQ[ƒ€I—¹ŠÖ”
+    /// ã‚²ãƒ¼ãƒ çµ‚äº†é–¢æ•°
     /// </summary>
     public void QuitGame()
     {
 #if UNITY_EDITOR
-        // ƒGƒfƒBƒ^ã‚Å‚ÍƒvƒŒƒCƒ‚[ƒh‚ğ’â~
+        // ã‚¨ãƒ‡ã‚£ã‚¿ä¸Šã§ã¯ãƒ—ãƒ¬ã‚¤ãƒ¢ãƒ¼ãƒ‰ã‚’åœæ­¢
         EditorApplication.isPlaying = false;
 #else
-            // ƒrƒ‹ƒhŒã‚ÍƒAƒvƒŠ‚ğI—¹
+            // ãƒ“ãƒ«ãƒ‰å¾Œã¯ã‚¢ãƒ—ãƒªã‚’çµ‚äº†
             Application.Quit();
 #endif
+    }
+
+    /// <summary>
+    /// ãƒã‚¦ã‚¹ or ã‚¿ãƒƒãƒã®å…¥åŠ›ä½ç½®ã‚’è¿”ã™
+    /// </summary>
+    /// <returns>ãƒã‚¦ã‚¹ or ã‚¿ãƒƒãƒã®å…¥åŠ›ä½ç½®</returns>
+    public Vector2 GetInputPosition()
+    {
+        if (Input.touchCount > 0)
+            return Input.GetTouch(0).position;
+        else
+            return Input.mousePosition;
     }
 
 }

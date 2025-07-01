@@ -1,55 +1,56 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ‰æ–Ê‚ÌƒAƒXƒyƒNƒg”ä‚Ì•ÏXˆ—
+/// ç”»é¢ã®ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã®å¤‰æ›´å‡¦ç†
 /// </summary>
 [ExecuteAlways]
 public class Aspect_Keeper_Gravity_Puzzle : MonoBehaviour
 {
-    [Header("‘ÎÛ‚ÌƒJƒƒ‰")]
+    [Header("å¯¾è±¡ã®ã‚«ãƒ¡ãƒ©")]
     [SerializeField] private Camera Target_Camera;
 
-    [Header("–Ú“I‚Ì‰æ–Ê‰ğ‘œ“x")]
+    [Header("ç›®çš„ã®ç”»é¢è§£åƒåº¦")]
     public Vector2 Aspect_vec;//600*900
 
-    //•ÏX‘O‚ÌƒXƒNƒŠ[ƒ“ƒTƒCƒY
+    //å¤‰æ›´å‰ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚º
     private int _Prev_Width = 0;
     private int _Prev_Height = 0;
 
     void Update()
     {
-        //‰æ–ÊƒTƒCƒY‚ª•ÏX‚³‚ê‚½ê‡‚Ì‚İAViewport‚ğXV
+        //ç”»é¢ã‚µã‚¤ã‚ºãŒå¤‰æ›´ã•ã‚ŒãŸå ´åˆã®ã¿ã€Viewportã‚’æ›´æ–°
         //if (_Prev_Width != Screen.width || _Prev_Height != Screen.height)
             UpdateCameraViewport();
+
     }
 
     /// <summary>
-    /// ƒJƒƒ‰‚ÌViewport‚ğƒAƒXƒyƒNƒg”ä‚É‰‚¶‚Ä’²®
+    /// ã‚«ãƒ¡ãƒ©ã®Viewportã‚’ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã«å¿œã˜ã¦èª¿æ•´
     /// </summary>
     private void UpdateCameraViewport()
     {
-        var screen_aspect = Screen.width / (float)Screen.height; //‰æ–Ê‚ÌƒAƒXƒyƒNƒg”ä
-        var target_aspect = Aspect_vec.x / Aspect_vec.y;         //–Ú“I‚ÌƒAƒXƒyƒNƒg”ä       
-        var mag_rate = target_aspect / screen_aspect;       //–Ú“IƒAƒXƒyƒNƒg”ä‚É‚·‚é‚½‚ß‚Ì”{—¦       
-        var viewport_rect = new Rect(0, 0, 1, 1);                //Viewport‰Šú’l‚ÅRect‚ğì¬
+        var screen_aspect = Screen.width / (float)Screen.height; //ç”»é¢ã®ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
+        var target_aspect = Aspect_vec.x / Aspect_vec.y;         //ç›®çš„ã®ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”       
+        var mag_rate = target_aspect / screen_aspect;       //ç›®çš„ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã«ã™ã‚‹ãŸã‚ã®å€ç‡       
+        var viewport_rect = new Rect(0, 0, 1, 1);                //ViewportåˆæœŸå€¤ã§Rectã‚’ä½œæˆ
 
         if (mag_rate < 1)
         {
-            viewport_rect.width = mag_rate;                         //g—p‚·‚é‰¡•‚ğ•ÏX           
-            viewport_rect.x = 0.5f - viewport_rect.width * 0.5f;    //’†‰›Šñ‚¹
+            viewport_rect.width = mag_rate;                         //ä½¿ç”¨ã™ã‚‹æ¨ªå¹…ã‚’å¤‰æ›´           
+            viewport_rect.x = 0.5f - viewport_rect.width * 0.5f;    //ä¸­å¤®å¯„ã›
         }
         else
         {
-            viewport_rect.height = 1 / mag_rate;                    //g—p‚·‚éc•‚ğ•ÏX            
-            viewport_rect.y = 0.5f - viewport_rect.height * 0.5f;   //’†‰›Šñ‚¹
+            viewport_rect.height = 1 / mag_rate;                    //ä½¿ç”¨ã™ã‚‹ç¸¦å¹…ã‚’å¤‰æ›´            
+            viewport_rect.y = 0.5f - viewport_rect.height * 0.5f;   //ä¸­å¤®å¯„ã›
         }
-        //Œ»İ‚Ì‰æ–ÊƒTƒCƒY‚ğ•Û‘¶
+        //ç¾åœ¨ã®ç”»é¢ã‚µã‚¤ã‚ºã‚’ä¿å­˜
         _Prev_Width = Screen.width;
         _Prev_Height = Screen.height;
 
-        //ƒJƒƒ‰‚ÌViewport‚É“K—p
+        //ã‚«ãƒ¡ãƒ©ã®Viewportã«é©ç”¨
         Target_Camera.rect = viewport_rect;
     }
 }

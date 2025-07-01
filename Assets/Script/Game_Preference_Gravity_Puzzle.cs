@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,16 +6,17 @@ using Common_Gravity_Puzzle;
 
 public class Game_Preference_Gravity_Puzzle : MonoBehaviour
 {
-    [Header("ŠeƒXƒNƒŠƒvƒg")]
+    [Header("å„ã‚¹ã‚¯ãƒªãƒ—ãƒˆ")]
     [SerializeField] private Game_Manager_Gravity_Puzzle  game_manager;
     [SerializeField] private Image_Manager_Gravity_Puzzle image_manager;
     [SerializeField] private Screen_Change_Gravity_Puzzle screen_change;
     [SerializeField] private Click_Manager_Gravity_Puzzle click_manager;
+    [SerializeField] private Csv_Roader_Gravity_Puzzle    csv_roder;
 
-    [Header("ƒXƒe[ƒW‚Ì§ŒÀŠÔ(•b)")]
+    [Header("ã‚¹ãƒ†ãƒ¼ã‚¸ã®åˆ¶é™æ™‚é–“(ç§’)")]
     public int[] _Time;
 
-    [Header("ƒQ[ƒ€”»’è‰æ–Ê‚É‘JˆÚ‚·‚é‘Ò‹@ŠÔ(•b)")]
+    [Header("ã‚²ãƒ¼ãƒ åˆ¤å®šç”»é¢ã«é·ç§»ã™ã‚‹å¾…æ©Ÿæ™‚é–“(ç§’)")]
     public float _Judge_Screen_Latency = 1.0f;
 
     // Start is called before the first frame update
@@ -26,6 +27,7 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
         GrovalNum_Gravity_Puzzle.sImageManager = image_manager;
         GrovalNum_Gravity_Puzzle.sScreenChange = screen_change;
         GrovalNum_Gravity_Puzzle.sClickManager = click_manager;
+        GrovalNum_Gravity_Puzzle.sCsvRoader = csv_roder;
     }
 
     // Update is called once per frame

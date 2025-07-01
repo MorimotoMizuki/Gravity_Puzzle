@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,133 +7,135 @@ using Common_Gravity_Puzzle;
 
 public class Screen_Change_Gravity_Puzzle : MonoBehaviour
 {
-    [Header("Še‰æ–Ê‚ÌƒLƒƒƒ“ƒoƒXƒIƒuƒWƒFƒNƒg")]
+    [Header("å„ç”»é¢ã®ã‚­ãƒ£ãƒ³ãƒã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
     public Canvas[] _Screen_Canvas;
 
-    [Header("ƒtƒF[ƒh‚³‚¹‚é‰æ‘œ")]
+    [Header("ãƒ•ã‚§ãƒ¼ãƒ‰ã•ã›ã‚‹ç”»åƒ")]
     [SerializeField] private Image _Fade_Img;
 
-    [Header("‰æ–Ê‚ÌƒtƒF[ƒhŠÔ")]
+    [Header("ç”»é¢ã®ãƒ•ã‚§ãƒ¼ãƒ‰æ™‚é–“")]
     private float _Fade_Speed = 0.5f;
 
-    //ƒQ[ƒ€”»’è‰æ–Ê‘JˆÚƒtƒ‰ƒO
+    //ã‚²ãƒ¼ãƒ åˆ¤å®šç”»é¢é·ç§»ãƒ•ãƒ©ã‚°
     private bool _Is_Screen_Judge = false;
-    //ƒQ[ƒ€”»’è‰æ–Ê‚É‘JˆÚ‚·‚éˆê‰ñ–Ú”»’è—p
+    //ã‚²ãƒ¼ãƒ åˆ¤å®šç”»é¢ã«é·ç§»ã™ã‚‹ä¸€å›ç›®åˆ¤å®šç”¨
     private bool _Is_Judge_First = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        //‘S‚Ä‚Ì‰æ–Ê‚ğ”ñ•\¦
+        //å…¨ã¦ã®ç”»é¢ã‚’éè¡¨ç¤º
         for (int i = 0; i < _Screen_Canvas.Length; i++)
             _Screen_Canvas[i].gameObject.SetActive(false);
-        //ƒ^ƒCƒgƒ‹‰æ–Ê‚ğ•\¦
+        //ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã‚’è¡¨ç¤º
         _Screen_Canvas[(int)GrovalConst_Gravity_Puzzle.Screen_ID.TITLE].gameObject.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //ƒ^ƒCƒgƒ‹‰æ–ÊƒNƒŠƒbƒN
+        //ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã‚¯ãƒªãƒƒã‚¯
         if(GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click)
         {
-            //•\¦”ñ•\¦‰æ–ÊID—p
+            //è¡¨ç¤ºéè¡¨ç¤ºç”»é¢IDç”¨
             GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
 
             display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
 
-            //‰æ–ÊØ‚è‘Ö‚¦
+            //ç”»é¢åˆ‡ã‚Šæ›¿ãˆ
             if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
                 Screen_Change_Start(display_id, invisible_id, true);
 
             GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click = false;
         }
 
-        //ƒ{ƒ^ƒ“ƒNƒŠƒbƒNˆ—
+        //ãƒœã‚¿ãƒ³ã‚¯ãƒªãƒƒã‚¯æ™‚å‡¦ç†
         Clicked_Button();
 
-        //ƒQ[ƒ€”»’èˆ—
+        //ã‚²ãƒ¼ãƒ åˆ¤å®šæ™‚å‡¦ç†
         Game_Judge_Screen();
     }
 
     /// <summary>
-    /// ‰æ–ÊØ‚è‘Ö‚¦‚ÌƒRƒ‹[ƒ`ƒ“‚ğŒÄ‚Ño‚·ŠÖ”
+    /// ç”»é¢åˆ‡ã‚Šæ›¿ãˆã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’å‘¼ã³å‡ºã™é–¢æ•°
     /// </summary>
-    /// <param name="display_id">•\¦‚µ‚½‚¢‰æ–Ê‚ğ¦‚·ID</param>
-    /// <param name="invisible_id">”ñ•\¦‚É‚µ‚½‚¢‰æ–Ê‚ğ¦‚·ID</param>
-    /// <param name="is_fade">ƒtƒF[ƒh‚ğs‚¤‰Â”Û</param>
+    /// <param name="display_id">è¡¨ç¤ºã—ãŸã„ç”»é¢ã‚’ç¤ºã™ID</param>
+    /// <param name="invisible_id">éè¡¨ç¤ºã«ã—ãŸã„ç”»é¢ã‚’ç¤ºã™ID</param>
+    /// <param name="is_fade">ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’è¡Œã†å¯å¦</param>
     public void Screen_Change_Start(GrovalConst_Gravity_Puzzle.Screen_ID display_id, GrovalConst_Gravity_Puzzle.Screen_ID invisible_id, bool is_fade)
     {
-        //‰æ–ÊID‚ª–¢İ’è‚Ìê‡‚ÍI—¹
+        //ç”»é¢IDãŒæœªè¨­å®šã®å ´åˆã¯çµ‚äº†
         if (display_id == GrovalConst_Gravity_Puzzle.Screen_ID.NONE || invisible_id == GrovalConst_Gravity_Puzzle.Screen_ID.NONE) return;
 
-        //ƒRƒ‹[ƒ`ƒ“ŠJn
+        //ã‚³ãƒ«ãƒ¼ãƒãƒ³é–‹å§‹
         StartCoroutine(Screen_Change_Coroutine(display_id, invisible_id, is_fade));
     }
 
     /// <summary>
-    ///  ‰æ–ÊØ‚è‘Ö‚¦ƒRƒ‹[ƒ`ƒ“
+    ///  ç”»é¢åˆ‡ã‚Šæ›¿ãˆã‚³ãƒ«ãƒ¼ãƒãƒ³
     /// </summary>
-    /// <param name="display_id">•\¦‚·‚é‰æ–Ê‚ğ¦‚·ID</param>
-    /// <param name="invisible_id">”ñ•\¦‚É‚·‚é‰æ–Ê‚ğ¦‚·ID</param>
-    /// <param name="is_fade">ƒtƒF[ƒh‚ğs‚¤‰Â”Û</param>
-    /// <returns>ƒRƒ‹[ƒ`ƒ“—p IEnumerator</returns>
+    /// <param name="display_id">è¡¨ç¤ºã™ã‚‹ç”»é¢ã‚’ç¤ºã™ID</param>
+    /// <param name="invisible_id">éè¡¨ç¤ºã«ã™ã‚‹ç”»é¢ã‚’ç¤ºã™ID</param>
+    /// <param name="is_fade">ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’è¡Œã†å¯å¦</param>
+    /// <returns>ã‚³ãƒ«ãƒ¼ãƒãƒ³ç”¨ IEnumerator</returns>
     private IEnumerator Screen_Change_Coroutine(GrovalConst_Gravity_Puzzle.Screen_ID display_id, GrovalConst_Gravity_Puzzle.Screen_ID invisible_id, bool is_fade)
     {
-        Color fade_color = _Fade_Img.color; //ƒtƒF[ƒh‚·‚éF
+        Color fade_color = _Fade_Img.color; //ãƒ•ã‚§ãƒ¼ãƒ‰ã™ã‚‹è‰²
 
         if (is_fade)
         {
-            //ƒtƒF[ƒh‚·‚éF‚Ìİ’è
+            //ãƒ•ã‚§ãƒ¼ãƒ‰ã™ã‚‹è‰²ã®è¨­å®š
             if (display_id == GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR)
                 fade_color = Color.white;
             else
                 fade_color = Color.black;
 
-            //ƒtƒF[ƒhƒCƒ“
+            //ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
             GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)GrovalConst_Gravity_Puzzle.Screen_ID.FADE].gameObject, true);
-            yield return StartCoroutine(Fade(0f, 1f, fade_color)); //“§–¾¨F
+            yield return StartCoroutine(Fade(0f, 1f, fade_color)); //é€æ˜â†’è‰²
         }
 
-        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)invisible_id].gameObject, false); //‰æ–Ê”ñ•\¦            
-        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)display_id].gameObject, true);    //‰æ–Ê•\¦
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)invisible_id].gameObject, false); //ç”»é¢éè¡¨ç¤º            
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)display_id].gameObject, true);    //ç”»é¢è¡¨ç¤º
 
-        GrovalNum_Gravity_Puzzle.gNOW_SCREEN_ID = display_id;      //Œ»İ‚Ì‰æ–Êî•ñXV        
+        GrovalNum_Gravity_Puzzle.gNOW_SCREEN_ID = display_id;      //ç¾åœ¨ã®ç”»é¢æƒ…å ±æ›´æ–°        
 
-        //Œ»İ•\¦‚³‚ê‚Ä‚¢‚é‰æ–Ê
+        //ç¾åœ¨è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹ç”»é¢
         switch (display_id)
         {
-            //ƒ^ƒCƒgƒ‹‰æ–Ê
+            //ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
             case GrovalConst_Gravity_Puzzle.Screen_ID.TITLE:
                 {
-                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//‘Ò‹@ƒtƒF[ƒY
-                    GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL = 1; //ƒXƒe[ƒWƒŒƒxƒ‹‚ğ1‚É‚·‚é
+                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//å¾…æ©Ÿãƒ•ã‚§ãƒ¼ã‚º
+                    GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL = 1; //ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ¬ãƒ™ãƒ«ã‚’1ã«ã™ã‚‹
                     break;
                 }
-            //ƒQ[ƒ€‰æ–Ê
+            //ã‚²ãƒ¼ãƒ ç”»é¢
             case GrovalConst_Gravity_Puzzle.Screen_ID.GAME:
                 {
-                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.CREATING_STAGE;//ƒ}ƒbƒv¶¬ƒtƒF[ƒY
+                    GrovalNum_Gravity_Puzzle.sGameManager.Reset_Stage();  //ã‚¹ãƒ†ãƒ¼ã‚¸ãƒªã‚»ãƒƒãƒˆ
+                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//å¾…æ©Ÿãƒ•ã‚§ãƒ¼ã‚º
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, true); //ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³è¡¨ç¤º
 
-                    //ƒXƒe[ƒW‚Ì§ŒÀŠÔİ’è
+                    //ã‚¹ãƒ†ãƒ¼ã‚¸ã®åˆ¶é™æ™‚é–“è¨­å®š
                     {
-                        int index = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1; //”z—ñŒÄ‚Ño‚·ƒCƒ“ƒfƒNƒX
-                        int time = 60; //§ŒÀŠÔ
+                        int index = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1; //é…åˆ—å‘¼ã³å‡ºã™ã‚¤ãƒ³ãƒ‡ã‚¯ã‚¹
+                        int time = 60; //åˆ¶é™æ™‚é–“
 
-                        //ŠÔ‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡
+                        //æ™‚é–“ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆ
                         if (index <= GrovalNum_Gravity_Puzzle.sGamePreference._Time.Length)
                             time = GrovalNum_Gravity_Puzzle.sGamePreference._Time[index];
 
-                        //ƒ^ƒCƒ}[‚ÌŠÔ‚ğİ’è
+                        //ã‚¿ã‚¤ãƒãƒ¼ã®æ™‚é–“ã‚’è¨­å®š
                         GrovalNum_Gravity_Puzzle.sGameManager.Set_Limit_Time(time);
                     }
                     break;
                 }
-            //ƒNƒŠƒA‰æ–Ê
+            //ã‚¯ãƒªã‚¢ç”»é¢
             case GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR:
                 {
-                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//‘Ò‹@ƒtƒF[ƒY
+                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//å¾…æ©Ÿãƒ•ã‚§ãƒ¼ã‚º
                     _Is_Judge_First = true;
                     break;
                 }
@@ -143,36 +145,36 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
 
         if (is_fade)
         {
-            // ƒtƒF[ƒhƒAƒEƒg
-            yield return StartCoroutine(Fade(1f, 0f, fade_color)); //F¨“§–¾
+            // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
+            yield return StartCoroutine(Fade(1f, 0f, fade_color)); //è‰²â†’é€æ˜
             GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)GrovalConst_Gravity_Puzzle.Screen_ID.FADE].gameObject, false);
         }
     }
 
     /// <summary>
-    /// ƒtƒF[ƒhƒRƒ‹[ƒ`ƒ“
+    /// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚³ãƒ«ãƒ¼ãƒãƒ³
     /// </summary>
-    /// <param name="from">Œ»İ‚Ì‰æ–Ê‚Ì alpha’l</param>
-    /// <param name="to">ÅI“I‚È‚Ì‰æ–Ê‚Ì alpha’l</param>
-    /// <param name="color">ƒtƒF[ƒh‚·‚éF</param>
-    /// <returns>ƒRƒ‹[ƒ`ƒ“—p‚Ì IEnumerator</returns>
+    /// <param name="from">ç¾åœ¨ã®ç”»é¢ã® alphaå€¤</param>
+    /// <param name="to">æœ€çµ‚çš„ãªã®ç”»é¢ã® alphaå€¤</param>
+    /// <param name="color">ãƒ•ã‚§ãƒ¼ãƒ‰ã™ã‚‹è‰²</param>
+    /// <returns>ã‚³ãƒ«ãƒ¼ãƒãƒ³ç”¨ã® IEnumerator</returns>
     private IEnumerator Fade(float from, float to, Color color)
     {
-        float timer = 0f; //Œo‰ßŠÔ‚Ì‰Šú‰»
+        float timer = 0f; //çµŒéæ™‚é–“ã®åˆæœŸåŒ–
 
-        //ƒtƒF[ƒhŠÔ’†ƒ‹[ƒv
+        //ãƒ•ã‚§ãƒ¼ãƒ‰æ™‚é–“ä¸­ãƒ«ãƒ¼ãƒ—
         while (timer < _Fade_Speed)
         {
-            float alpha = Mathf.Lerp(from, to, timer / _Fade_Speed);        //w’èŠÔ“à‚Åalpha’l‚ğ•âŠÔ            
-            _Fade_Img.color = new Color(color.r, color.g, color.b, alpha);  //•âŠÔ‚µ‚½alpha’l‚ğ—p‚¢‚ÄF‚ğİ’è(rgb‚Í‚»‚Ì‚Ü‚Ü‚Åalpha’l‚Ì‚İ•ÏX)           
-            timer += Time.deltaTime;                                        //Œo‰ßŠÔ‚ğ‰ÁZ            
-            yield return null;                                              //1ƒtƒŒ[ƒ€‘Ò‹@
+            float alpha = Mathf.Lerp(from, to, timer / _Fade_Speed);        //æŒ‡å®šæ™‚é–“å†…ã§alphaå€¤ã‚’è£œé–“            
+            _Fade_Img.color = new Color(color.r, color.g, color.b, alpha);  //è£œé–“ã—ãŸalphaå€¤ã‚’ç”¨ã„ã¦è‰²ã‚’è¨­å®š(rgbã¯ãã®ã¾ã¾ã§alphaå€¤ã®ã¿å¤‰æ›´)           
+            timer += Time.deltaTime;                                        //çµŒéæ™‚é–“ã‚’åŠ ç®—            
+            yield return null;                                              //1ãƒ•ãƒ¬ãƒ¼ãƒ å¾…æ©Ÿ
         }
-        _Fade_Img.color = new Color(color.r, color.g, color.b, to);         //ÅI“I‚ÈF‚ğİ’è
+        _Fade_Img.color = new Color(color.r, color.g, color.b, to);         //æœ€çµ‚çš„ãªè‰²ã‚’è¨­å®š
     }
 
     /// <summary>
-    /// ƒQ[ƒ€”»’è‰æ–Ê‘JˆÚƒtƒ‰ƒOtrue
+    /// ã‚²ãƒ¼ãƒ åˆ¤å®šç”»é¢é·ç§»ãƒ•ãƒ©ã‚°true
     /// </summary>
     private void Set_Is_Screen_Judge()
     {
@@ -180,27 +182,27 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒQ[ƒ€”»’èˆ—
+    /// ã‚²ãƒ¼ãƒ åˆ¤å®šæ™‚å‡¦ç†
     /// </summary>
     private void Game_Judge_Screen()
     {
         if (GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE == GrovalConst_Gravity_Puzzle.GameState.GAMECLEAR &&
             _Is_Judge_First)
         {
-            //’x‰„ˆ—
+            //é…å»¶å‡¦ç†
             Invoke("Set_Is_Screen_Judge", GrovalNum_Gravity_Puzzle.sGamePreference._Judge_Screen_Latency);
             _Is_Judge_First = false;
         }
 
         if (_Is_Screen_Judge)
         {
-            //•\¦”ñ•\¦‰æ–ÊID—p
+            //è¡¨ç¤ºéè¡¨ç¤ºç”»é¢IDç”¨
             GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
 
             display_id = GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR;
             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
 
-            //‰æ–ÊØ‚è‘Ö‚¦
+            //ç”»é¢åˆ‡ã‚Šæ›¿ãˆ
             if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
                 Screen_Change_Start(display_id, invisible_id, true);
 
@@ -209,41 +211,41 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ{ƒ^ƒ“ƒNƒŠƒbƒNˆ—
+    /// ãƒœã‚¿ãƒ³ã‚¯ãƒªãƒƒã‚¯æ™‚å‡¦ç†
     /// </summary>
     private void Clicked_Button()
     {
-        //ƒ{ƒ^ƒ“ƒNƒŠƒbƒN
+        //ãƒœã‚¿ãƒ³ã‚¯ãƒªãƒƒã‚¯
         for (GrovalConst_Gravity_Puzzle.Button_ID i = GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP; i <= GrovalConst_Gravity_Puzzle.Button_ID.TITLE; i++)
         {
             if (GrovalNum_Gravity_Puzzle.sClickManager._Is_Button[(int)i])
             {
-                //•\¦”ñ•\¦‰æ–ÊID—p
+                //è¡¨ç¤ºéè¡¨ç¤ºç”»é¢IDç”¨
                 GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
 
                 switch (i)
                 {
-                    //ƒMƒuƒAƒbƒvƒ{ƒ^ƒ“
+                    //ã‚®ãƒ–ã‚¢ãƒƒãƒ—ãƒœã‚¿ãƒ³
                     case GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP:
                         {
                             GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
                             break;
                         }
-                    //ƒlƒNƒXƒgƒ{ƒ^ƒ“
+                    //ãƒã‚¯ã‚¹ãƒˆãƒœã‚¿ãƒ³
                     case GrovalConst_Gravity_Puzzle.Button_ID.NEXT:
                         {
                             display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
                             break;
                         }
-                    //ƒŠƒvƒŒƒCƒ{ƒ^ƒ“
+                    //ãƒªãƒ—ãƒ¬ã‚¤ãƒœã‚¿ãƒ³
                     case GrovalConst_Gravity_Puzzle.Button_ID.REPLAY:
                         {
                             display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             break;
                         }
-                    //ƒ^ƒCƒgƒ‹ƒ{ƒ^ƒ“
+                    //ã‚¿ã‚¤ãƒˆãƒ«ãƒœã‚¿ãƒ³
                     case GrovalConst_Gravity_Puzzle.Button_ID.TITLE:
                         {
                             display_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
@@ -252,7 +254,7 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                         }
                 }
 
-                //‰æ–ÊØ‚è‘Ö‚¦
+                //ç”»é¢åˆ‡ã‚Šæ›¿ãˆ
                 if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
                     Screen_Change_Start(display_id, invisible_id, true);
 
