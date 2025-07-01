@@ -32,6 +32,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     private GrovalConst_Gravity_Puzzle.Obj_ID _Obj_ID;
     //現在の重力の向き
     private GrovalConst_Gravity_Puzzle.Flick_ID _Now_gravity_id = GrovalConst_Gravity_Puzzle.Flick_ID.NONE;
+    //移動ベクトル
+    private Vector2 _Move_vec = new Vector2();
 
     #region ブロック --------------------------------------------------------------------------------------------------
     private enum Block_State
@@ -70,6 +72,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             //風船
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
                 {
+                    Gravity_Move(_Rigid2D, true);
                     break;
                 }
             //ブロック
@@ -117,6 +120,21 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 {
                     break;
                 }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        //プレイヤー以外は終了
+        if (_Obj_ID != GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER) return;
+
+        //風船との衝突
+        if (collision.gameObject.name.Contains("BALLOON"))
+        {
+            //風船の削除
+            GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(collision.gameObject);
+            Debug.Log("Balloon__HIT");
+            return;
         }
     }
 
@@ -170,51 +188,58 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// <param name="is_reverse">反転フラグ</param>
     private void Gravity_Move(Rigidbody2D rigid, bool is_reverse)
     {
-        //重力の向きに変更が無い場合は終了
-        //if (_Now_gravity_id == GrovalNum_Gravity_Puzzle.sGameManager._Flick_id)
-        //    return;
-
-            Vector2 vec = Vector2.zero;
+        //角度
+        Vector3 angle = transform.eulerAngles;
 
         switch(_Now_gravity_id)
         {
             case GrovalConst_Gravity_Puzzle.Flick_ID.RIGHT:
                 {
-                    vec.x = 1;
-                    vec.y = 0;
+                    _Move_vec.x = 1;
+                    _Move_vec.y = 0;
+                    angle.z = 90.0f;
                     break;
                 }
             case GrovalConst_Gravity_Puzzle.Flick_ID.LEFT:
                 {
-                    vec.x = -1;
-                    vec.y = 0;
+                    _Move_vec.x = -1;
+                    _Move_vec.y = 0;
+                    angle.z = 270.0f;
                     break;
                 }
             case GrovalConst_Gravity_Puzzle.Flick_ID.UP:
                 {
-                    vec.x = 0;
-                    vec.y = -1;
+                    _Move_vec.x = 0;
+                    _Move_vec.y = 1;
+                    angle.z = 180.0f;
                     break;
                 }
             case GrovalConst_Gravity_Puzzle.Flick_ID.DOWN:
                 {
-                    vec.x = 0;
-                    vec.y = 1;
+                    _Move_vec.x = 0;
+                    _Move_vec.y = -1;
+                    angle.z = 0.0f;
                     break;
                 }
         }
 
         //反転フラグがtrueの場合はベクトルを反転
         if(is_reverse)
-            vec.x *= -1; vec.y *= -1;
+        {
+            _Move_vec.x *= -1;
+            _Move_vec.y *= -1;
+        }
 
         //加えた力のリセット
         rigid.velocity = Vector3.zero;
 
-        //一定方向力を加える
-        rigid.AddForce(vec * 9.0f, ForceMode2D.Force);
+        //角度変更
+        transform.eulerAngles = angle;
 
-        Debug.Log("パワー");
+        _Move_vec *= 9.0f;
+
+        //一定方向力を加える
+        rigid.AddForce(_Move_vec, ForceMode2D.Force);
 
         //重力の向き更新
         _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;

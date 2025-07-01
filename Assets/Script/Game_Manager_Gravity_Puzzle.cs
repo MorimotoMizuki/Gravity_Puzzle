@@ -163,6 +163,15 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// オブジェクトの削除処理
+    /// </summary>
+    /// <param name="target_obj">対象のゲームオブジェクト</param>
+    public void Delete_Obj(GameObject target_obj)
+    {
+        Destroy(target_obj);
+    }
+
     #region フリック関係 --------------------------------------------------------------------------------------------------
 
     /// <summary>
