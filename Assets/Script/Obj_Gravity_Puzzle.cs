@@ -44,6 +44,10 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     private GrovalConst_Gravity_Puzzle.Flick_ID _Now_gravity_id = GrovalConst_Gravity_Puzzle.Flick_ID.NONE;
     //移動ベクトル
     private Vector2 _Move_vec = new Vector2();
+    //アニメーションカウント
+    private int _Anim_cnt = 0;
+    //アニメーション画像インデクス
+    private int _Anim_index = 0;
 
     #region ブロック --------------------------------------------------------------------------------------------------
     private enum Block_State
@@ -82,14 +86,27 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             case GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
                 {
                     Obj_Setting(false); //オブジェクトの詳細設定
-                    Gravity_Move(_Rigid2D, false);
+                    Gravity_Move(_Rigid2D, false); //重力処理
+                    if(_IsGround)
+                    {
+                        //常時アニメーション処理 : 通常時
+                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img);
+                    }
+                    else
+                    {
+                        //常時アニメーション処理 : 落下時
+                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Fall_img);
+                    }
+
                     break;
                 }
             //風船
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
                 {
                     Obj_Setting(false); //オブジェクトの詳細設定
-                    Gravity_Move(_Rigid2D, true);
+                    Gravity_Move(_Rigid2D, true);  //重力処理
+                    //常時アニメーション処理 : 通常時
+                    Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Balloon_Normal_img);
                     break;
                 }
             //ブロック
@@ -382,6 +399,23 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     _Block_State = Block_State.READY; //待機フェーズへ
                     break;
                 }
+        }
+    }
+
+    private void Normal_Animation(Image target_img, Sprite[] change_img)
+    {
+        _Anim_cnt++;
+        if(_Anim_cnt > GrovalNum_Gravity_Puzzle.sGamePreference._Character_Anim_Change_cnt)
+        {
+            //画像変更
+            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(target_img, change_img[_Anim_index]);
+
+            //インデクス設定
+            if (_Anim_index < change_img.Length - 1)
+                _Anim_index++;
+            else
+                _Anim_index = 0;
+            _Anim_cnt = 0;
         }
     }
 }

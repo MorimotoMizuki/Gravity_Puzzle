@@ -709,9 +709,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.3528711
+    x: 0.3382644
     y: 0
-    width: 0.29425782
+    width: 0.32347116
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -963,6 +963,7 @@ MonoBehaviour:
   csv_roder: {fileID: 1797616892}
   _Time: 050000003c0000003c0000003c0000003c000000
   _Judge_Screen_Latency: 1
+  _Character_Anim_Change_cnt: 30
   _BlockArrow_RotSpeed: 120
 --- !u!4 &654978819
 Transform:
@@ -2625,6 +2626,15 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f4cbcd95d9f88fc45b6027836250d755, type: 3}
   - {fileID: 21300000, guid: d48d05261902a5d4dbdcb1b1494421e8, type: 3}
   - {fileID: 21300000, guid: 8d5b56b59bdf8624687b943f9c57b252, type: 3}
+  _Player_Normal_img:
+  - {fileID: 21300000, guid: 85202c16a39287c4dafb1f878a390d82, type: 3}
+  - {fileID: 21300000, guid: 5af5e3338322a00488aef9141cf1002e, type: 3}
+  _Player_Fall_img:
+  - {fileID: 21300000, guid: ca1892a9c03d9834aa0f48e36135eec6, type: 3}
+  - {fileID: 21300000, guid: 57c7e6b311e9dbf43b46e12244968398, type: 3}
+  _Balloon_Normal_img:
+  - {fileID: 21300000, guid: ae4185c1a9625134791ec72977f73988, type: 3}
+  - {fileID: 21300000, guid: 967b263d2087fdc4fa2470d9cd48bb80, type: 3}
   _HP_Fill: {fileID: 1517999015}
 --- !u!4 &2010017767
 Transform:

@@ -13,6 +13,13 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
     [Header("ブロックの上下左右画像")]
     public Sprite[] _Block_img;
 
+    [Header("キャラクターの通常アニメーション画像")]
+    public Sprite[] _Player_Normal_img;
+    [Header("キャラクターの落下アニメーション画像")]
+    public Sprite[] _Player_Fall_img;
+    [Header("風船の通常アニメーション画像")]
+    public Sprite[] _Balloon_Normal_img;
+
     [Header("タイマー画像")]
     public Image _HP_Fill;
 
