@@ -116,9 +116,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 
         //マップデータにステージデータがあるかチェック
         if(GrovalNum_Gravity_Puzzle.sCsvRoader._MapData.ContainsKey(index))
-        {
             _StageMap = GrovalNum_Gravity_Puzzle.sCsvRoader._MapData[index];
-        }
         //マップデータに無い場合はステージ1にする
         else
             _StageMap = GrovalNum_Gravity_Puzzle.sCsvRoader._MapData["stage1"];

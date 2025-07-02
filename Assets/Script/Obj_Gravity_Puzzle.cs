@@ -52,6 +52,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     #region プレイヤー ----------------------------------------------------------------------------------------------------
 
     private bool _Is_Goal = false;
+    private bool _Is_Crash = false;
 
     #endregion ------------------------------------------------------------------------------------------------------------
 
@@ -100,10 +101,18 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img[0], false); //オブジェクトの詳細設定
                     Gravity_Move(_Rigid2D, false); //重力処理
 
-                    if (_IsGround)
-                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img);  //常時アニメーション処理 : 通常時
+                    if(_Is_Crash)
+                    {
+                        Crash_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Crash_img);
+                    }
                     else
-                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Fall_img);    //常時アニメーション処理 : 落下時
+                    {
+                        if (_IsGround)
+                            Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img);  //常時アニメーション処理 : 通常時
+                        else
+                            Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Fall_img);    //常時アニメーション処理 : 落下時
+                    }
+
 
                     break;
                 }
@@ -194,10 +203,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         {
             //風船の削除
             GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(collision.gameObject);
-
             //着地判定のあるキャラクターの合計数を減らす
             GrovalNum_Gravity_Puzzle.sGameManager._Character_cnt--;
-
             //風船の獲得数増やす
             GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt++;
             return;
@@ -210,6 +217,14 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 //ゲームクリア判定
                 GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMECLEAR;
                 _Is_Goal = true;
+            }
+        }
+        //箱との当たり判定
+        if (collision.gameObject.name.Contains("BOX"))
+        {
+            if(!_Is_Crash)
+            {
+                _Is_Crash = true;
             }
         }
     }
@@ -493,6 +508,26 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 _Anim_index++;
             else
                 _Anim_index = 0;
+            _Anim_cnt = 0;
+        }
+    }
+
+    private void Crash_Animation(Image target_img, Sprite[] change_img)
+    {
+        _Anim_cnt++;
+        if (_Anim_cnt > GrovalNum_Gravity_Puzzle.sGamePreference._Character_Anim_Change_cnt)
+        {
+            //画像変更
+            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(target_img, change_img[_Anim_index]);
+
+            //インデクス設定
+            if (_Anim_index < change_img.Length - 1)
+                _Anim_index++;
+            else
+            {
+                //削除
+                GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject);
+            }
             _Anim_cnt = 0;
         }
     }

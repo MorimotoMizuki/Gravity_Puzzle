@@ -968,7 +968,7 @@ MonoBehaviour:
   _Judge_Screen_Latency: 1
   _Character_Anim_Change_cnt: 30
   _BlockArrow_RotSpeed: 120
-  _First_Gravity_Dir: 0200000003000000030000000300000003000000
+  _First_Gravity_Dir: 0200000002000000020000000200000002000000
 --- !u!4 &654978819
 Transform:
   m_ObjectHideFlags: 0
@@ -2636,6 +2636,9 @@ MonoBehaviour:
   _Player_Fall_img:
   - {fileID: 21300000, guid: ca1892a9c03d9834aa0f48e36135eec6, type: 3}
   - {fileID: 21300000, guid: 57c7e6b311e9dbf43b46e12244968398, type: 3}
+  _Player_Crash_img:
+  - {fileID: 21300000, guid: 669a2058c2d15f2458348268187d76c9, type: 3}
+  - {fileID: 21300000, guid: 1bd7af511df74004dbe56258c7b0de62, type: 3}
   _Balloon_Normal_img:
   - {fileID: 21300000, guid: ae4185c1a9625134791ec72977f73988, type: 3}
   - {fileID: 21300000, guid: 967b263d2087fdc4fa2470d9cd48bb80, type: 3}
