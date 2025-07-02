@@ -24,6 +24,11 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     [Header("ブロックの生成エリア : ブロックの親オブジェクト")]
     public RectTransform _Obj_area;
 
+    [HideInInspector] public int _Character_cnt = 0;
+    [HideInInspector] public int _Character_ground_cnt = 0;
+    [HideInInspector] public bool _Is_Flick;
+
+
     //マップデータ
     private List<List<int>> _StageMap = new List<List<int>>();
     //ブロックのサイズ
@@ -76,6 +81,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             case GrovalConst_Gravity_Puzzle.GameState.PLAYING:
                 {
                     //Timer(); //タイマー
+                    Flick_Permit();//フリック許可判定
                     Flick(); //フリック処理
                     break;
                 }
@@ -133,6 +139,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 
         //初期化
         _BlockSize = 0.0f;
+        _Character_cnt = 0;
     }
 
     /// <summary>
@@ -155,6 +162,16 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                     obj = Instantiate(_Obj_prefab[index - 1], _Obj_area);
                     obj.GetComponent<RectTransform>().anchoredPosition = pos;
                     obj.name = $"{(GrovalConst_Gravity_Puzzle.Obj_ID)index}";
+
+                    //着地判定をするキャラクターを計測
+                    switch(index)
+                    {
+                        case (int)GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
+                        case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
+                        case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
+                            _Character_cnt++;
+                        break;
+                    }
                 }
                 pos.x += _BlockSize;
             }
@@ -179,7 +196,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     private void Flick()
     {
-        if(GrovalNum_Gravity_Puzzle.sClickManager._Is_flick_start)
+        if (GrovalNum_Gravity_Puzzle.sClickManager._Is_flick_start)
         {
             //始点
             _Start_touch_pos = GrovalNum_Gravity_Puzzle.sClickManager.GetInputPosition();
@@ -196,6 +213,9 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 
             //フリックの方向を取得
             _Flick_id = FlickDirection(dir);
+
+            if (_Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+                _Character_ground_cnt = 0;
         }
     }
 
@@ -238,6 +258,18 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             Debug.Log("下");
             return GrovalConst_Gravity_Puzzle.Flick_ID.DOWN;
         }
+    }
+
+    /// <summary>
+    /// フリック許可判定
+    /// </summary>
+    private void Flick_Permit()
+    {
+        //キャラクターの合計数と着地したキャラクターの数が等しい場合はフリック許可
+        if (_Character_cnt != _Character_ground_cnt)
+            _Is_Flick = false;
+        else
+            _Is_Flick = true;
     }
 
     #endregion ------------------------------------------------------------------------------------------------------------

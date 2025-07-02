@@ -28,6 +28,9 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
         GrovalNum_Gravity_Puzzle.sScreenChange = screen_change;
         GrovalNum_Gravity_Puzzle.sClickManager = click_manager;
         GrovalNum_Gravity_Puzzle.sCsvRoader = csv_roder;
+
+        //60fpsに設定
+        Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame

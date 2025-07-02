@@ -12,6 +12,17 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     private RectTransform _Rect;
     private Rigidbody2D _Rigid2D;
 
+    [Header("地面判定用")]
+    [SerializeField] private Transform _GroundCheck;
+    [Header("判定範囲")]
+    [SerializeField] private float _CheckDistance = 0.1f;
+    [Header("地面レイヤー")]
+    [SerializeField] private LayerMask _GroundLayer;
+
+    //着地フラグ
+    [HideInInspector] public bool _IsGround;
+    private bool _Is_first_ground = true;
+
     //オブジェクト識別辞書
     private static readonly Dictionary<string, GrovalConst_Gravity_Puzzle.Obj_ID> _Name_to_Obj_ID
     = new Dictionary<string, GrovalConst_Gravity_Puzzle.Obj_ID>
@@ -66,38 +77,40 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             //プレイヤー
             case GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
                 {
+                    Obj_Setting(false); //オブジェクトの詳細設定
                     Gravity_Move(_Rigid2D, false);
                     break;
                 }
             //風船
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
                 {
+                    Obj_Setting(false); //オブジェクトの詳細設定
                     Gravity_Move(_Rigid2D, true);
                     break;
                 }
             //ブロック
             case GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK:
                 {
-                    Obj_Setting(); //オブジェクトの詳細設定
+                    Obj_Setting(true); //オブジェクトの詳細設定
                     Block_Move();
                     break;
                 }
             //ドア
             case GrovalConst_Gravity_Puzzle.Obj_ID.DOOR:
                 {
-                    Obj_Setting(); //オブジェクトの詳細設定
+                    Obj_Setting(true); //オブジェクトの詳細設定
                     break;
                 }
             //箱
             case GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
                 {
-                    Obj_Setting(); //オブジェクトの詳細設定
+                    Obj_Setting(true); //オブジェクトの詳細設定
                     break;
                 }
             //トゲボール
             case GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL:
                 {
-                    Obj_Setting(); //オブジェクトの詳細設定
+                    Obj_Setting(true); //オブジェクトの詳細設定
                     break;
                 }
             //右向きのトゲ
@@ -133,7 +146,9 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         {
             //風船の削除
             GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(collision.gameObject);
-            Debug.Log("Balloon__HIT");
+
+            //着地判定のあるキャラクターの合計数を減らす
+            GrovalNum_Gravity_Puzzle.sGameManager._Character_cnt--;
             return;
         }
     }
@@ -158,7 +173,9 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// <summary>
     /// オブジェクトの詳細設定
     /// </summary>
-    private void Obj_Setting(Vector2 size = default)
+    /// <param name="is_collider_size">コライダーのサイズ変更フラグ</param>
+    /// <param name="size">オブジェクトサイズ : デフォルトでGameManagerの_BlockSize</param>
+    private void Obj_Setting(bool is_collider_size, Vector2 size = default)
     {
         //ブロックのサイズが未設定では無い場合 かつ 設定フラグがfalse の場合
         if (GrovalNum_Gravity_Puzzle.sGameManager._BlockSize == 0.0f ||
@@ -176,7 +193,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         //オブジェクトサイズを設定
         _Rect.sizeDelta = new Vector2(size.x, size.y);
         //コライダーのサイズを設定
-        _Collider.size = new Vector2(size.x, size.y);
+        if(is_collider_size)
+            _Collider.size = new Vector2(size.x, size.y);
 
         _Is_setting = true;
     }
@@ -188,61 +206,93 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// <param name="is_reverse">反転フラグ</param>
     private void Gravity_Move(Rigidbody2D rigid, bool is_reverse)
     {
-        //角度
-        Vector3 angle = transform.eulerAngles;
-
-        switch(_Now_gravity_id)
+        if (_Now_gravity_id != GrovalNum_Gravity_Puzzle.sGameManager._Flick_id || _Is_first_ground)
         {
-            case GrovalConst_Gravity_Puzzle.Flick_ID.RIGHT:
-                {
-                    _Move_vec.x = 1;
-                    _Move_vec.y = 0;
-                    angle.z = 90.0f;
-                    break;
-                }
-            case GrovalConst_Gravity_Puzzle.Flick_ID.LEFT:
-                {
-                    _Move_vec.x = -1;
-                    _Move_vec.y = 0;
-                    angle.z = 270.0f;
-                    break;
-                }
-            case GrovalConst_Gravity_Puzzle.Flick_ID.UP:
-                {
-                    _Move_vec.x = 0;
-                    _Move_vec.y = 1;
-                    angle.z = 180.0f;
-                    break;
-                }
-            case GrovalConst_Gravity_Puzzle.Flick_ID.DOWN:
-                {
-                    _Move_vec.x = 0;
-                    _Move_vec.y = -1;
-                    angle.z = 0.0f;
-                    break;
-                }
+            //重力の向き更新
+            if (GrovalNum_Gravity_Puzzle.sGameManager._Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+                _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
+
+            //角度
+            Vector3 angle = transform.eulerAngles;
+
+            switch (_Now_gravity_id)
+            {
+                case GrovalConst_Gravity_Puzzle.Flick_ID.RIGHT:
+                    {
+                        _Move_vec.x = 1;
+                        _Move_vec.y = 0;
+                        angle.z = 90.0f;
+                        break;
+                    }
+                case GrovalConst_Gravity_Puzzle.Flick_ID.LEFT:
+                    {
+                        _Move_vec.x = -1;
+                        _Move_vec.y = 0;
+                        angle.z = 270.0f;
+                        break;
+                    }
+                case GrovalConst_Gravity_Puzzle.Flick_ID.UP:
+                    {
+                        _Move_vec.x = 0;
+                        _Move_vec.y = 1;
+                        angle.z = 180.0f;
+                        break;
+                    }
+                case GrovalConst_Gravity_Puzzle.Flick_ID.DOWN:
+                    {
+                        _Move_vec.x = 0;
+                        _Move_vec.y = -1;
+                        angle.z = 0.0f;
+                        break;
+                    }
+            }
+
+            //角度変更
+            transform.eulerAngles = angle;
+            //反転フラグがtrueの場合はベクトルを反転
+            if (is_reverse)
+            {
+                _Move_vec.x *= -1;
+                _Move_vec.y *= -1;
+            }
+
+            _IsGround = false;
+            _Is_first_ground = false;
         }
 
-        //反転フラグがtrueの場合はベクトルを反転
-        if(is_reverse)
+        //着地判定
+        Ground_Check();
+
+        if (!_IsGround)
         {
-            _Move_vec.x *= -1;
-            _Move_vec.y *= -1;
+            _Move_vec *= 1.04f;
+            //一定方向力を加える
+            rigid.AddForce(_Move_vec, ForceMode2D.Force);
         }
+    }
 
-        //加えた力のリセット
-        rigid.velocity = Vector3.zero;
-
-        //角度変更
-        transform.eulerAngles = angle;
-
-        _Move_vec *= 9.0f;
-
-        //一定方向力を加える
-        rigid.AddForce(_Move_vec, ForceMode2D.Force);
-
-        //重力の向き更新
-        _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
+    /// <summary>
+    /// 着地判定
+    /// </summary>
+    /// <returns>着地フラグ</returns>
+    private void Ground_Check()
+    {
+        //足元にRayを飛ばして当たったレイヤーが Ground の場合 : 着地
+        RaycastHit2D hit = Physics2D.Raycast(_GroundCheck.position, Vector2.down, _CheckDistance, _GroundLayer);
+        if (hit.collider != null)
+        {
+            if (!_IsGround)
+            {
+                _IsGround = true;
+                //着地したキャラクターの数を増やす
+                GrovalNum_Gravity_Puzzle.sGameManager._Character_ground_cnt++;
+                Debug.Log($"{_Obj_ID}_{GrovalNum_Gravity_Puzzle.sGameManager._Character_ground_cnt}");
+            }
+        }
+        else
+        {
+            _IsGround = false;
+        }
     }
 
     /// <summary>
@@ -259,7 +309,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     if (_Now_gravity_id != GrovalNum_Gravity_Puzzle.sGameManager._Flick_id)
                     {
                         //重力の向き更新
-                        _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
+                        if (GrovalNum_Gravity_Puzzle.sGameManager._Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+                            _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
 
                         _Block_State = Block_State.ROtATION; //回転フェーズへ
                     }

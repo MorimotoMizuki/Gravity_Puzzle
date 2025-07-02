@@ -60,8 +60,12 @@ public class Click_Manager_Gravity_Puzzle : MonoBehaviour
                     if (GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE != GrovalConst_Gravity_Puzzle.GameState.PLAYING)
                         break;
 
+                    //フリック許可がfalseの場合は終了
+                    if (GrovalNum_Gravity_Puzzle.sGameManager._Is_Flick == false)
+                        break;
+
                     //フリック処理
-                    if(_Is_Touch_or_Click_down)
+                    if (_Is_Touch_or_Click_down)
                     {
                         _Is_flick_start = true; //始点
                     }
@@ -69,7 +73,6 @@ public class Click_Manager_Gravity_Puzzle : MonoBehaviour
                     {
                         _Is_flick_end = true;   //終点
                     }
-
                     break;
                 }
         }
