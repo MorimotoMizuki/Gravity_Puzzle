@@ -25,6 +25,9 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     [Header("ブロックの矢印の回転スピード")]
     public float _BlockArrow_RotSpeed = 120.0f;
 
+    [Header("ステージごとの初期の重力の方向")]
+    public GrovalConst_Gravity_Puzzle.Flick_ID[] _First_Gravity_Dir;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -24,10 +24,14 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     [Header("ブロックの生成エリア : ブロックの親オブジェクト")]
     public RectTransform _Obj_area;
 
-    [HideInInspector] public int _Character_cnt = 0;
-    [HideInInspector] public int _Character_ground_cnt = 0;
-    [HideInInspector] public bool _Is_Flick;
+    [HideInInspector] public int _Character_cnt = 0;        //着地判定のあるキャラクターの合計数
+    [HideInInspector] public int _Character_ground_cnt = 0; //着地したキャラクターの数
+    [HideInInspector] public int _Balloon_sum = 0;          //風船の合計数
+    [HideInInspector] public int _Balloon_cnt = 0;          //風船の獲得数
 
+    [HideInInspector] public bool _Is_Open_Door = false; //ドアの開閉フラグ
+
+    [HideInInspector] public bool _Is_Flick;            //フリック許可フラグ
 
     //マップデータ
     private List<List<int>> _StageMap = new List<List<int>>();
@@ -81,6 +85,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             case GrovalConst_Gravity_Puzzle.GameState.PLAYING:
                 {
                     //Timer(); //タイマー
+                    Door_Judge();   //ドアの開閉判定
                     Flick_Permit();//フリック許可判定
                     Flick(); //フリック処理
                     break;
@@ -124,6 +129,14 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         //オブジェクトマップ生成
         Create_Obj_Map(_StageMap);
 
+        //初期の重力方向設定
+        int index_num = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1;
+        if (index_num >= GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir.Length - 1 ||                              //インデクスが範囲外の場合 または
+            GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir[index_num] == GrovalConst_Gravity_Puzzle.Flick_ID.NONE) //フリックIDがNONEの場合
+            _Flick_id = GrovalConst_Gravity_Puzzle.Flick_ID.DOWN;
+        else
+            _Flick_id = GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir[index_num];
+
         GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.PLAYING;
     }
 
@@ -137,9 +150,17 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         //ゲームオーバー時に表示するオブジェクトを表示
         GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_GameOver_obj, false);
 
+        //オブジェクトエリア内の子オブジェクトを全て削除
+        foreach (Transform child in _Obj_area)
+            Delete_Obj(child.gameObject);
+
         //初期化
         _BlockSize = 0.0f;
         _Character_cnt = 0;
+        _Character_ground_cnt = 0;
+        _Balloon_sum = 0;
+        _Balloon_cnt = 0;
+        _Is_Open_Door = false;
     }
 
     /// <summary>
@@ -150,7 +171,6 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     {
         //マップの初期座標 : 左上端
         Vector2 pos = new Vector2(0 + _BlockSize / 2, 0 - _BlockSize / 2);
-        GameObject obj = new GameObject();
 
         for (int y = 0; y < map.Count; y++)
         {
@@ -159,7 +179,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                 int index = map[y][x];
                 if(index != 0)
                 {
-                    obj = Instantiate(_Obj_prefab[index - 1], _Obj_area);
+                    GameObject obj = Instantiate(_Obj_prefab[index - 1], _Obj_area);
                     obj.GetComponent<RectTransform>().anchoredPosition = pos;
                     obj.name = $"{(GrovalConst_Gravity_Puzzle.Obj_ID)index}";
 
@@ -167,9 +187,12 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                     switch(index)
                     {
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
-                        case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
-                            _Character_cnt++;
+                            _Character_cnt++;   //着地判定のあるキャラクターの数
+                        break;
+                        case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
+                            _Character_cnt++;   //着地判定のあるキャラクターの数
+                            _Balloon_sum++;     //風船の数
                         break;
                     }
                 }
@@ -187,6 +210,15 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     public void Delete_Obj(GameObject target_obj)
     {
         Destroy(target_obj);
+    }
+
+    /// <summary>
+    /// ドアの開閉状態を判定
+    /// </summary>
+    private void Door_Judge()
+    {
+        if(_Balloon_cnt == _Balloon_sum)
+            _Is_Open_Door = true;
     }
 
     #region フリック関係 --------------------------------------------------------------------------------------------------

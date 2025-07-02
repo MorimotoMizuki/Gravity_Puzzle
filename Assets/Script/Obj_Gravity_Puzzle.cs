@@ -49,6 +49,12 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     //アニメーション画像インデクス
     private int _Anim_index = 0;
 
+    #region プレイヤー ----------------------------------------------------------------------------------------------------
+
+    private bool _Is_Goal = false;
+
+    #endregion ------------------------------------------------------------------------------------------------------------
+
     #region ブロック --------------------------------------------------------------------------------------------------
     private enum Block_State
     {
@@ -68,10 +74,10 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _Img = GetComponent<Image>();
-        _Collider = GetComponent<BoxCollider2D>();
-        _Rect = GetComponent<RectTransform>();
-        _Rigid2D = GetComponent<Rigidbody2D>();
+        _Img        = GetComponent<Image>();
+        _Collider   = GetComponent<BoxCollider2D>();
+        _Rect       = GetComponent<RectTransform>();
+        _Rigid2D    = GetComponent<Rigidbody2D>();
 
         //オブジェクトID設定
         _Obj_ID = Obj_Identification();
@@ -84,54 +90,75 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         {
             //プレイヤー
             case GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
-                {
-                    Obj_Setting(false); //オブジェクトの詳細設定
+                {              
+                    if (Out_Screen(gameObject)) //画面外に出た場合 : ゲームオーバー
+                    {
+                        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+                        GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject); //プレイヤー削除
+                    }
+
+                    Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img[0], false); //オブジェクトの詳細設定
                     Gravity_Move(_Rigid2D, false); //重力処理
-                    if(_IsGround)
-                    {
-                        //常時アニメーション処理 : 通常時
-                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img);
-                    }
+
+                    if (_IsGround)
+                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img);  //常時アニメーション処理 : 通常時
                     else
-                    {
-                        //常時アニメーション処理 : 落下時
-                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Fall_img);
-                    }
+                        Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Fall_img);    //常時アニメーション処理 : 落下時
 
                     break;
                 }
             //風船
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
-                {
-                    Obj_Setting(false); //オブジェクトの詳細設定
+                {                    
+                    if (Out_Screen(gameObject)) //画面外に出た場合 : ゲームオーバー
+                    {
+                        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+                        GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject); //風船削除
+                    }
+                    Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Balloon_Normal_img[0], false); //オブジェクトの詳細設定
                     Gravity_Move(_Rigid2D, true);  //重力処理
-                    //常時アニメーション処理 : 通常時
-                    Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Balloon_Normal_img);
+
+                    Normal_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Balloon_Normal_img); //常時アニメーション処理 : 通常時
+
                     break;
                 }
             //ブロック
             case GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK:
                 {
-                    Obj_Setting(true); //オブジェクトの詳細設定
+                    Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._BlockBase_Img, true); //オブジェクトの詳細設定
                     Block_Move();
                     break;
                 }
             //ドア
             case GrovalConst_Gravity_Puzzle.Obj_ID.DOOR:
                 {
-                    Obj_Setting(true); //オブジェクトの詳細設定
+                    Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Door_Normal_img, true); //オブジェクトの詳細設定
+
+                    if(GrovalNum_Gravity_Puzzle.sGameManager._Is_Open_Door)
+                    {
+                        //ドアの画像変更 : 開いた画像に変更
+                        GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Door_Open_img);
+                    }
+
                     break;
                 }
             //箱
             case GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
                 {
-                    Obj_Setting(true); //オブジェクトの詳細設定
+                    if (Out_Screen(gameObject)) //画面外に出た場合 : ゲームオーバー
+                    {
+                        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+                        GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject); //風船削除
+                    }
+
+                    Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Box_img, true); //オブジェクトの詳細設定
+                    Gravity_Move(_Rigid2D, false); //重力処理
                     break;
                 }
             //トゲボール
             case GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL:
                 {
-                    Obj_Setting(true); //オブジェクトの詳細設定
+                    //Obj_Setting(true); //オブジェクトの詳細設定
                     break;
                 }
             //右向きのトゲ
@@ -170,7 +197,20 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
 
             //着地判定のあるキャラクターの合計数を減らす
             GrovalNum_Gravity_Puzzle.sGameManager._Character_cnt--;
+
+            //風船の獲得数増やす
+            GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt++;
             return;
+        }
+        //ドアとの衝突 : 開いている状態のドア
+        if (collision.gameObject.name.Contains("DOOR") && GrovalNum_Gravity_Puzzle.sGameManager._Is_Open_Door)
+        {
+            if(!_Is_Goal)
+            {
+                //ゲームクリア判定
+                GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMECLEAR;
+                _Is_Goal = true;
+            }
         }
     }
 
@@ -196,7 +236,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     /// <param name="is_collider_size">コライダーのサイズ変更フラグ</param>
     /// <param name="size">オブジェクトサイズ : デフォルトでGameManagerの_BlockSize</param>
-    private void Obj_Setting(bool is_collider_size, Vector2 size = default)
+    private void Obj_Setting(Sprite img, bool is_collider_size, Vector2 size = default)
     {
         //ブロックのサイズが未設定では無い場合 かつ 設定フラグがfalse の場合
         if (GrovalNum_Gravity_Puzzle.sGameManager._BlockSize == 0.0f ||
@@ -210,25 +250,40 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 GrovalNum_Gravity_Puzzle.sGameManager._BlockSize
             );
         }
-
         //オブジェクトサイズを設定
         _Rect.sizeDelta = new Vector2(size.x, size.y);
         //コライダーのサイズを設定
         if(is_collider_size)
             _Collider.size = new Vector2(size.x, size.y);
 
+        //画像の初期設定
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, img);
+
         //重力の向き更新
         if (GrovalNum_Gravity_Puzzle.sGameManager._Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
             _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
 
-        if(_Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK)
+        switch(_Obj_ID)
         {
-            //矢印ブロックを非表示にする
-            GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, false);
-            //画像変更 : 上下左右ブロックの画像
-            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Block_img[(int)_Now_gravity_id]);
+            case GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
+                {
+                    transform.SetAsLastSibling();//最前面に
+                    break;
+                }
+            case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
+                {
+                    transform.SetAsLastSibling();//最前面に
+                    break;
+                }
+            case GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK:
+                {
+                    //矢印ブロックを非表示にする
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, false);
+                    //画像変更 : 上下左右ブロックの画像
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Block_img[(int)_Now_gravity_id]);
+                    break;
+                }
         }
-
         _Is_setting = true;
     }
 
@@ -302,6 +357,24 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             //一定方向力を加える
             rigid.AddForce(_Move_vec, ForceMode2D.Force);
         }
+    }
+
+    /// <summary>
+    /// オブジェクトの画面外判定
+    /// </summary>
+    /// <param name="target_obj">ゲームオブジェクト</param>
+    /// <returns></returns>
+    private bool Out_Screen(GameObject target_obj)
+    {
+        //targetUI（RectTransform）のワールド座標をカメラのビューポート座標に変換
+        //ビューポート座標は (0,0) が画面左下、(1,1) が画面右上を示す
+        Vector3 viewport_pos = Camera.main.WorldToViewportPoint(target_obj.transform.position);
+
+        //ビューポート座標が 0～1 の範囲外であれば、画面外にあると判定
+        if (viewport_pos.x < 0 || viewport_pos.x > 1 || viewport_pos.y < 0 || viewport_pos.y > 1)
+            return true;    //画面外
+        else
+            return false;   //画面内
     }
 
     /// <summary>
@@ -402,6 +475,11 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 常時アニメーション処理
+    /// </summary>
+    /// <param name="target_img">対象の画像オブジェクト</param>
+    /// <param name="change_img">アニメーションするSprite配列</param>
     private void Normal_Animation(Image target_img, Sprite[] change_img)
     {
         _Anim_cnt++;

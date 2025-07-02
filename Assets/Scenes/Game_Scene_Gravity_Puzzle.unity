@@ -941,6 +941,9 @@ MonoBehaviour:
   _Obj_area: {fileID: 954659854}
   _Character_cnt: 0
   _Character_ground_cnt: 0
+  _Balloon_sum: 0
+  _Balloon_cnt: 0
+  _Is_Open_Door: 0
   _Is_Flick: 0
   _BlockSize: 0
   _Flick_id: 0
@@ -965,6 +968,7 @@ MonoBehaviour:
   _Judge_Screen_Latency: 1
   _Character_Anim_Change_cnt: 30
   _BlockArrow_RotSpeed: 120
+  _First_Gravity_Dir: 0200000003000000030000000300000003000000
 --- !u!4 &654978819
 Transform:
   m_ObjectHideFlags: 0
@@ -2635,6 +2639,9 @@ MonoBehaviour:
   _Balloon_Normal_img:
   - {fileID: 21300000, guid: ae4185c1a9625134791ec72977f73988, type: 3}
   - {fileID: 21300000, guid: 967b263d2087fdc4fa2470d9cd48bb80, type: 3}
+  _Door_Normal_img: {fileID: 21300000, guid: e0db43f832f63f442bf621bd1fab5cb2, type: 3}
+  _Door_Open_img: {fileID: 21300000, guid: a16a6bf5fb8bd63479c16d3361936468, type: 3}
+  _Box_img: {fileID: 21300000, guid: 0589e2cf9da7a4a409bf1662f2e4e005, type: 3}
   _HP_Fill: {fileID: 1517999015}
 --- !u!4 &2010017767
 Transform:

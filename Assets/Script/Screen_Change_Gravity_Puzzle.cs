@@ -141,8 +141,6 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                 }
         }
 
-        Debug.Log(GrovalNum_Gravity_Puzzle.gNOW_SCREEN_ID);
-
         if (is_fade)
         {
             // フェードアウト
@@ -235,7 +233,7 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                     case GrovalConst_Gravity_Puzzle.Button_ID.NEXT:
                         {
                             display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
+                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR;
                             break;
                         }
                     //リプレイボタン

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4408323388960929884}
   - component: {fileID: 6129847906560450283}
   - component: {fileID: 5690874673580072351}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,3 +134,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34cef51a507bb1e4f819a9a6b929d61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _GroundCheck: {fileID: 0}
+  _CheckDistance: 0.1
+  _GroundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _IsGround: 0
+  _Block_Arrow: {fileID: 0}
