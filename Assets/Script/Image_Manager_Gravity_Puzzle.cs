@@ -7,7 +7,10 @@ using Common_Gravity_Puzzle;
 
 public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 {
-    [Header("ブロックの画像")]
+    [Header("ブロックのベース画像")]
+    public Sprite _BlockBase_Img;
+
+    [Header("ブロックの上下左右画像")]
     public Sprite[] _Block_img;
 
     [Header("タイマー画像")]

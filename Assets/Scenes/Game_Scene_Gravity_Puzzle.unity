@@ -709,9 +709,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.34424126
+    x: 0.3528711
     y: 0
-    width: 0.3115175
+    width: 0.29425782
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -939,6 +939,9 @@ MonoBehaviour:
   - {fileID: 189741795095353595, guid: 4a98719ab38d00a479f72e26d66a1084, type: 3}
   - {fileID: 8690274119339241392, guid: 2aeb234fbf4e8ee48a12523ddc9b7232, type: 3}
   _Obj_area: {fileID: 954659854}
+  _Character_cnt: 0
+  _Character_ground_cnt: 0
+  _Is_Flick: 0
   _BlockSize: 0
   _Flick_id: 0
 --- !u!114 &654978818
@@ -960,6 +963,7 @@ MonoBehaviour:
   csv_roder: {fileID: 1797616892}
   _Time: 050000003c0000003c0000003c0000003c000000
   _Judge_Screen_Latency: 1
+  _BlockArrow_RotSpeed: 120
 --- !u!4 &654978819
 Transform:
   m_ObjectHideFlags: 0
@@ -2615,6 +2619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1fd1939ae912948b6c7dad25dc22a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _BlockBase_Img: {fileID: 21300000, guid: 20623531fe32e694f820ae6b8900bf10, type: 3}
   _Block_img:
   - {fileID: 21300000, guid: 4daecfb6da9f24f48af51b9c06db8b4e, type: 3}
   - {fileID: 21300000, guid: f4cbcd95d9f88fc45b6027836250d755, type: 3}

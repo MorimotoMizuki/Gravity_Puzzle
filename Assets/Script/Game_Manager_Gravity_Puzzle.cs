@@ -212,10 +212,12 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             Vector2 dir = _End_touch_pos - _Start_touch_pos;
 
             //フリックの方向を取得
-            _Flick_id = FlickDirection(dir);
-
-            if (_Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+            GrovalConst_Gravity_Puzzle.Flick_ID flick_id = FlickDirection(dir);
+            if (flick_id != _Flick_id && flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+            {
+                _Flick_id = flick_id;
                 _Character_ground_cnt = 0;
+            }
         }
     }
 

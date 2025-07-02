@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Common_Gravity_Puzzle;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public class Obj_Gravity_Puzzle : MonoBehaviour
 {
@@ -53,6 +52,11 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     }
     //ブロックのフェーズ状態
     private Block_State _Block_State = Block_State.READY;
+
+    [Header("矢印ブロック")]
+    [SerializeField] private Image _Block_Arrow;
+
+    private float _Arrow_RotSpeed = 0.0f; //矢印の回転スピード
 
     private bool _Is_setting = false; //設定フラグ
     #endregion ------------------------------------------------------------------------------------------------------------
@@ -196,6 +200,18 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         if(is_collider_size)
             _Collider.size = new Vector2(size.x, size.y);
 
+        //重力の向き更新
+        if (GrovalNum_Gravity_Puzzle.sGameManager._Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+            _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
+
+        if(_Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK)
+        {
+            //矢印ブロックを非表示にする
+            GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, false);
+            //画像変更 : 上下左右ブロックの画像
+            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Block_img[(int)_Now_gravity_id]);
+        }
+
         _Is_setting = true;
     }
 
@@ -308,9 +324,22 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     //フリックが行われた場合
                     if (_Now_gravity_id != GrovalNum_Gravity_Puzzle.sGameManager._Flick_id)
                     {
-                        //重力の向き更新
-                        if (GrovalNum_Gravity_Puzzle.sGameManager._Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
-                            _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
+                        //画像変更 : ブロックのベース画像
+                        GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._BlockBase_Img);
+                        //矢印ブロックの表示
+                        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, true);
+                        //角度
+                        Vector3 angle = _Block_Arrow.gameObject.transform.eulerAngles;
+
+                        angle.z = GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)_Now_gravity_id];
+
+                        _Block_Arrow.gameObject.transform.eulerAngles = angle;
+
+                        //回転の幅が90度を超えている場合 : 回転スピードを2倍にする
+                        if (Mathf.DeltaAngle(_Block_Arrow.transform.eulerAngles.z, GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)GrovalNum_Gravity_Puzzle.sGameManager._Flick_id]) > 90.0f)
+                            _Arrow_RotSpeed = GrovalNum_Gravity_Puzzle.sGamePreference._BlockArrow_RotSpeed * 2;
+                        else
+                            _Arrow_RotSpeed = GrovalNum_Gravity_Puzzle.sGamePreference._BlockArrow_RotSpeed;
 
                         _Block_State = Block_State.ROtATION; //回転フェーズへ
                     }
@@ -318,17 +347,38 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 }
             //回転フェーズ
             case Block_State.ROtATION:
-                {
+                {                
+                    float currentAngle = _Block_Arrow.transform.eulerAngles.z;                                                      //現在の角度                    
+                    float targetAngle = GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)GrovalNum_Gravity_Puzzle.sGameManager._Flick_id]; //目的の角度                   
+                    float angleDiff = Mathf.DeltaAngle(currentAngle, targetAngle);                                                  //最短角度差                   
+                    float dir = Mathf.Sign(angleDiff);//回転方向（+なら左回転、-なら右回転）
 
-                    _Block_State = Block_State.IMG_CHANGE; //画像変更フェーズへ
+                    //回転処理
+                    float rot_frame = _Arrow_RotSpeed * Time.deltaTime * dir;
+                    _Block_Arrow.transform.Rotate(0f, 0f, rot_frame);
+
+                    //一定範囲以内になったら完了とみなす（例：1度以内）
+                    if (Mathf.Abs(angleDiff) < 1.0f)
+                    {
+                        //角度をピタッと揃える（端数を切る）
+                        Vector3 fixedAngle = _Block_Arrow.transform.eulerAngles;
+                        fixedAngle.z = targetAngle;
+                        _Block_Arrow.transform.eulerAngles = fixedAngle;
+                        //画像変更フェーズへ
+                        _Block_State = Block_State.IMG_CHANGE;
+                        //重力の向き更新
+                        if (GrovalNum_Gravity_Puzzle.sGameManager._Flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
+                            _Now_gravity_id = GrovalNum_Gravity_Puzzle.sGameManager._Flick_id;
+                    }
                     break;
                 }
             //画像変更フェーズ
             case Block_State.IMG_CHANGE:
                 {
-                    //画像変更
+                    //矢印ブロックの非表示
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, false);
+                    //画像変更 : 上下左右ブロックの画像
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Block_img[(int)_Now_gravity_id]);
-
                     _Block_State = Block_State.READY; //待機フェーズへ
                     break;
                 }

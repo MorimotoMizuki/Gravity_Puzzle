@@ -6,6 +6,9 @@ namespace Common_Gravity_Puzzle
     /// </summary>
     public static class GrovalConst_Gravity_Puzzle
     {
+        //上下左右の角度
+        public static readonly float[] DIR_ANGLE = { 270.0f, 90.0f, 0.0f, 180.0f };
+
         /// <summary>
         /// 画面ID
         /// </summary>

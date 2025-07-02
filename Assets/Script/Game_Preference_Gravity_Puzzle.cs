@@ -19,6 +19,9 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     [Header("ゲーム判定画面に遷移する待機時間(秒)")]
     public float _Judge_Screen_Latency = 1.0f;
 
+    [Header("ブロックの矢印の回転スピード")]
+    public float _BlockArrow_RotSpeed = 120.0f;
+
     // Start is called before the first frame update
     void Start()
     {
