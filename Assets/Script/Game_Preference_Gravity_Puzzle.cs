@@ -21,6 +21,9 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
 
     [Header("キャラクターの常時アニメーション切り替えカウント")]
     public int _Character_Anim_Change_cnt = 30;
+    [Header("キャラクターのクラッシュアニメーション切り替えカウント")]
+    public int _Character_CrashAnim_Change_cnt = 10;
+
 
     [Header("ブロックの矢印の回転スピード")]
     public float _BlockArrow_RotSpeed = 120.0f;

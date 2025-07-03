@@ -30,6 +30,9 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
     [Header("箱の画像")]
     public Sprite _Box_img;
 
+    [Header("トゲボールの画像")]
+    public Sprite _SpikeBall_img;
+
     [Header("タイマー画像")]
     public Image _HP_Fill;
 

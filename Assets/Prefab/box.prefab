@@ -41,13 +41,13 @@ GameObject:
   m_Component:
   - component: {fileID: 5013620437103584051}
   - component: {fileID: 2240108289596057146}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: BOX_DIED
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5013620437103584051
 Transform:
   m_ObjectHideFlags: 0
@@ -204,8 +204,9 @@ MonoBehaviour:
   _CheckDistance: 0.1
   _GroundLayer:
     serializedVersion: 2
-    m_Bits: 576
+    m_Bits: 2624
   _IsGround: 0
+  _Is_first_ground: 1
   _Block_Arrow: {fileID: 0}
 --- !u!50 &7896156452905289698
 Rigidbody2D:

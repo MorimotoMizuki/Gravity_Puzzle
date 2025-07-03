@@ -48,6 +48,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     private float _Limit_time;   //制限時間
     private float _Current_time; //残り時間
 
+    private int _Name_index = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -158,6 +160,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         _Character_ground_cnt = 0;
         _Balloon_sum = 0;
         _Balloon_cnt = 0;
+        _Name_index = 0;
         _Is_Open_Door = false;
     }
 
@@ -179,13 +182,14 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                 {
                     GameObject obj = Instantiate(_Obj_prefab[index - 1], _Obj_area);
                     obj.GetComponent<RectTransform>().anchoredPosition = pos;
-                    obj.name = $"{(GrovalConst_Gravity_Puzzle.Obj_ID)index}";
+                    obj.name = $"{(GrovalConst_Gravity_Puzzle.Obj_ID)index}_{_Name_index}";
 
                     //着地判定をするキャラクターを計測
                     switch(index)
                     {
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
+                        case (int)GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL:
                             _Character_cnt++;   //着地判定のあるキャラクターの数
                         break;
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
@@ -193,6 +197,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                             _Balloon_sum++;     //風船の数
                         break;
                     }
+                    _Name_index++;
                 }
                 pos.x += _BlockSize;
             }
@@ -247,6 +252,17 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             {
                 _Flick_id = flick_id;
                 _Character_ground_cnt = 0;
+                foreach (Transform child in _Obj_area)
+                {
+                    if (child.gameObject.name.Contains("BOX") ||
+                        child.gameObject.name.Contains("SPIKE_BALL"))
+                    {
+                        Obj_Gravity_Puzzle chile_obj = child.gameObject.GetComponent<Obj_Gravity_Puzzle>();
+                        chile_obj._IsGround = false;
+                        chile_obj._Is_first_ground = true;
+                    }
+                }
+
             }
         }
     }
