@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 449408056557091748}
   - component: {fileID: 8270483348492993611}
   - component: {fileID: 2794541902422239148}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,8 +212,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _GroundCheck: {fileID: 0}
   _CheckDistance: 0.1
-  _GroundLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  _GroundLayer: []
   _IsGround: 0
   _Block_Arrow: {fileID: 179590652541124990}

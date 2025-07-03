@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4813460722137502126}
   - component: {fileID: 1233939994560509119}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,8 +167,9 @@ MonoBehaviour:
   _CheckDistance: 0.1
   _GroundLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 576
   _IsGround: 0
+  _Block_Arrow: {fileID: 0}
 --- !u!50 &478957247902930739
 Rigidbody2D:
   serializedVersion: 4

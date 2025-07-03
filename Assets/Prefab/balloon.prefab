@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4501317738123541550}
   - component: {fileID: 1800672303486159167}
   - component: {fileID: 179064213860765213}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: balloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,8 +95,9 @@ MonoBehaviour:
   _CheckDistance: 0.1
   _GroundLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 576
   _IsGround: 0
+  _Block_Arrow: {fileID: 0}
 --- !u!50 &1800672303486159167
 Rigidbody2D:
   serializedVersion: 4

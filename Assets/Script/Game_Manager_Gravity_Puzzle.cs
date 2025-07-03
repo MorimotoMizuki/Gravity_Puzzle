@@ -297,11 +297,11 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     private void Flick_Permit()
     {
-        //キャラクターの合計数と着地したキャラクターの数が等しい場合はフリック許可
-        if (_Character_cnt != _Character_ground_cnt)
-            _Is_Flick = false;
-        else
+        //着地したキャラクターの数とキャラクターの合計数が等しい場合はフリック許可
+        if (_Character_ground_cnt == _Character_cnt)
             _Is_Flick = true;
+        else
+            _Is_Flick = false;
     }
 
     #endregion ------------------------------------------------------------------------------------------------------------
