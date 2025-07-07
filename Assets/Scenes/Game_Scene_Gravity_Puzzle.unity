@@ -969,7 +969,7 @@ MonoBehaviour:
   _Character_Anim_Change_cnt: 30
   _Character_CrashAnim_Change_cnt: 10
   _BlockArrow_RotSpeed: 120
-  _First_Gravity_Dir: 0200000002000000020000000200000002000000
+  _First_Gravity_Dir: 0300000003000000030000000300000002000000
 --- !u!4 &654978819
 Transform:
   m_ObjectHideFlags: 0

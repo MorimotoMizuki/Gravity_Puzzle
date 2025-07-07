@@ -70,6 +70,9 @@ namespace Common_Gravity_Puzzle
             DOWN_SPIKE, //下向きのトゲ
         }
 
+        /// <summary>
+        /// ゴールの状態
+        /// </summary>
         public enum Goal_Stage
         {
             READY,
@@ -93,7 +96,7 @@ namespace Common_Gravity_Puzzle
         public static GrovalConst_Gravity_Puzzle.GameState gNOW_GAMESTATE;
 
         //現在のステージレベル
-        public static int gNOW_STAGE_LEVEL = 1;
+        public static int gNOW_STAGE_LEVEL = 5;
 
         //各スクリプト
         public static Game_Manager_Gravity_Puzzle sGameManager;

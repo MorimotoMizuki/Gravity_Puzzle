@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Common_Gravity_Puzzle;
+using System;
 
 public class Screen_Change_Gravity_Puzzle : MonoBehaviour
 {
@@ -100,7 +101,7 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
         GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)display_id].gameObject, true);    //画面表示
 
         GrovalNum_Gravity_Puzzle.gNOW_SCREEN_ID = display_id;      //現在の画面情報更新        
-
+        
         //現在表示されている画面
         switch (display_id)
         {
@@ -130,6 +131,8 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                         //タイマーの時間を設定
                         GrovalNum_Gravity_Puzzle.sGameManager.Set_Limit_Time(time);
                     }
+
+                    Debug.Log("ステージレベル" + GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL);
                     break;
                 }
             //クリア画面
@@ -232,21 +235,29 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                     //ネクストボタン
                     case GrovalConst_Gravity_Puzzle.Button_ID.NEXT:
                         {
-                            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR;
+
+                            string index = $"stage{GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL + 1}";
+                            //マップデータにステージデータがあるかチェック
+                            if (GrovalNum_Gravity_Puzzle.sCsvRoader._MapData.ContainsKey(index))
+                                GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL++;            //ステージレベルアップ
+                            else
+                                display_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;//タイトル画面へ
+
                             break;
                         }
                     //リプレイボタン
                     case GrovalConst_Gravity_Puzzle.Button_ID.REPLAY:
                         {
-                            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             break;
                         }
                     //タイトルボタン
                     case GrovalConst_Gravity_Puzzle.Button_ID.TITLE:
                         {
-                            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
+                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
                             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
                             break;
                         }

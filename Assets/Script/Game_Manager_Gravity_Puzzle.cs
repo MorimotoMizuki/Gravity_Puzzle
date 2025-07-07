@@ -132,7 +132,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 
         //初期の重力方向設定
         int index_num = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1;
-        if (index_num >= GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir.Length - 1 ||                              //インデクスが範囲外の場合 または
+        if (index_num >= GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir.Length  ||                                 //インデクスが範囲外の場合 または
             GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir[index_num] == GrovalConst_Gravity_Puzzle.Flick_ID.NONE) //フリックIDがNONEの場合
             _Flick_id = GrovalConst_Gravity_Puzzle.Flick_ID.DOWN;
         else
@@ -225,7 +225,6 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             _Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.READY)
         {
             _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE;
-            Debug.Log("ドアOPEN");
         }
     }
 
@@ -316,8 +315,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     private void Flick_Permit()
     {
-        //着地したキャラクターの数とキャラクターの合計数が等しい場合はフリック許可
-        if (_Character_ground_cnt == _Character_cnt)
+        //着地したキャラクターの数がキャラクターの合計数以上の場合はフリック許可
+        if (_Character_ground_cnt >= _Character_cnt)
             _Is_Flick = true;
         else
             _Is_Flick = false;
