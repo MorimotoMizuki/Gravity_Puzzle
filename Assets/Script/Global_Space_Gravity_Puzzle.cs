@@ -69,8 +69,18 @@ namespace Common_Gravity_Puzzle
             UP_SPIKE,   //上向きのトゲ
             DOWN_SPIKE, //下向きのトゲ
         }
+
+        public enum Goal_Stage
+        {
+            READY,
+            IMG_CHANGE,
+            PLAYER_IN,
+            DOOR_CLOSE,
+            CLEAR,
+        }
+
     }
-    
+
     /// <summary>
     /// 共通変数
     /// </summary>

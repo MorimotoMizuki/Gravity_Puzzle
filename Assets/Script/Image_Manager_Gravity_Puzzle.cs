@@ -24,16 +24,17 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
     [Header("風船の通常アニメーション画像")]
     public Sprite[] _Balloon_Normal_img;
 
-    [Header("ドアの通常時の画像")]
-    public Sprite _Door_Normal_img;
-    [Header("ドアの開いた時の画像")]
-    public Sprite _Door_Open_img;
+    [Header("ドアのの画像")]
+    public Sprite[] _Door_img;
 
     [Header("箱の画像")]
     public Sprite _Box_img;
 
     [Header("トゲボールの画像")]
     public Sprite _SpikeBall_img;
+
+    [Header("トゲの画像")]
+    public Sprite[] _Spile_img;
 
     [Header("タイマー画像")]
     public Image _HP_Fill;

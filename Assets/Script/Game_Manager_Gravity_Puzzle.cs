@@ -29,7 +29,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     [HideInInspector] public int _Balloon_sum = 0;          //風船の合計数
     [HideInInspector] public int _Balloon_cnt = 0;          //風船の獲得数
 
-    [HideInInspector] public bool _Is_Open_Door = false; //ドアの開閉フラグ
+    //ドアのフェーズ状態
+    [HideInInspector] public GrovalConst_Gravity_Puzzle.Goal_Stage _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.READY; 
 
     [HideInInspector] public bool _Is_Flick;            //フリック許可フラグ
 
@@ -161,7 +162,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         _Balloon_sum = 0;
         _Balloon_cnt = 0;
         _Name_index = 0;
-        _Is_Open_Door = false;
+        _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.READY;
     }
 
     /// <summary>
@@ -220,8 +221,12 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     private void Door_Judge()
     {
-        if(_Balloon_cnt == _Balloon_sum)
-            _Is_Open_Door = true;
+        if (_Balloon_cnt == _Balloon_sum &&
+            _Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.READY)
+        {
+            _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE;
+            Debug.Log("ドアOPEN");
+        }
     }
 
     #region フリック関係 --------------------------------------------------------------------------------------------------
@@ -256,7 +261,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                 {
                     if (child.gameObject.name.Contains("BOX") ||
                         child.gameObject.name.Contains("SPIKE_BALL") ||
-                        child.gameObject.name.Contains("BALLOON"))
+                        child.gameObject.name.Contains("BALLOON") ||
+                        child.gameObject.name.Contains("PLAYER"))
                     {
                         Obj_Gravity_Puzzle chile_obj = child.gameObject.GetComponent<Obj_Gravity_Puzzle>();
                         chile_obj._IsGround = false;
