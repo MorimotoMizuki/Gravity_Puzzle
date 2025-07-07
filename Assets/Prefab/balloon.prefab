@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8098814427592722762}
   - component: {fileID: 1970038674565301023}
   - component: {fileID: 5308361241101759818}
-  - component: {fileID: 4501317738123541550}
   - component: {fileID: 1800672303486159167}
   - component: {fileID: 179064213860765213}
-  m_Layer: 5
+  - component: {fileID: 6019918894959003}
+  m_Layer: 8
   m_Name: balloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,25 +80,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4501317738123541550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3482738803760426719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34cef51a507bb1e4f819a9a6b929d61e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _GroundCheck: {fileID: 1464185701645603315}
-  _CheckDistance: 0.1
-  _GroundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _IsGround: 0
-  _Block_Arrow: {fileID: 0}
 --- !u!50 &1800672303486159167
 Rigidbody2D:
   serializedVersion: 4
@@ -155,12 +136,32 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 50, y: 54.7}
   m_Direction: 0
+--- !u!114 &6019918894959003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3482738803760426719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34cef51a507bb1e4f819a9a6b929d61e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _GroundCheck: {fileID: 1464185701645603315}
+  _CheckDistance: 0.1
+  _GroundLayer:
+    serializedVersion: 2
+    m_Bits: 832
+  _IsGround: 0
+  _Is_first_ground: 1
+  _Block_Arrow: {fileID: 0}
 --- !u!1 &5763239603541724207
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8872201545851531174}
   - component: {fileID: 1897187470915858082}
-  m_Layer: 8
+  m_Layer: 5
   m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +227,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

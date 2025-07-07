@@ -255,7 +255,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                 foreach (Transform child in _Obj_area)
                 {
                     if (child.gameObject.name.Contains("BOX") ||
-                        child.gameObject.name.Contains("SPIKE_BALL"))
+                        child.gameObject.name.Contains("SPIKE_BALL") ||
+                        child.gameObject.name.Contains("BALLOON"))
                     {
                         Obj_Gravity_Puzzle chile_obj = child.gameObject.GetComponent<Obj_Gravity_Puzzle>();
                         chile_obj._IsGround = false;
@@ -288,22 +289,18 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         // 4方向に分類（右：-45〜45度、上：45〜135度、左：135〜225度、下：225〜315度）
         if ((angle >= 0 && angle < 45f) || (angle >= 315f && angle < 360f))
         {
-            Debug.Log("右");
             return GrovalConst_Gravity_Puzzle.Flick_ID.RIGHT;
         }
         else if (angle >= 45f && angle < 135f)
         {
-            Debug.Log("上");
             return GrovalConst_Gravity_Puzzle.Flick_ID.UP;
         }
         else if (angle >= 135f && angle < 225f)
         {
-            Debug.Log("左");
             return GrovalConst_Gravity_Puzzle.Flick_ID.LEFT;
         }
         else // 225°～315°
         {
-            Debug.Log("下");
             return GrovalConst_Gravity_Puzzle.Flick_ID.DOWN;
         }
     }

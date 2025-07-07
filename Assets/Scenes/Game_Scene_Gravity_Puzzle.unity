@@ -2640,6 +2640,9 @@ MonoBehaviour:
   _Player_Crash_img:
   - {fileID: 21300000, guid: 669a2058c2d15f2458348268187d76c9, type: 3}
   - {fileID: 21300000, guid: 1bd7af511df74004dbe56258c7b0de62, type: 3}
+  _Player_Spike_img:
+  - {fileID: 21300000, guid: 3974085cb37680245b54a6005ce88f64, type: 3}
+  - {fileID: 21300000, guid: 099f76ab5b2df4a498b44b92bc52a695, type: 3}
   _Balloon_Normal_img:
   - {fileID: 21300000, guid: ae4185c1a9625134791ec72977f73988, type: 3}
   - {fileID: 21300000, guid: 967b263d2087fdc4fa2470d9cd48bb80, type: 3}

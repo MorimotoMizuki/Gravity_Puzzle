@@ -57,6 +57,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
 
     private bool _Is_Goal = false;
     private bool _Is_Crash = false;
+    private bool _Is_Spike = false;
 
     #endregion ------------------------------------------------------------------------------------------------------------
 
@@ -117,6 +118,17 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                             GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
                         }
                     }
+                    else if(_Is_Spike)
+                    {
+                        bool _is_anim_end = Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Spike_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt);
+                        if (_is_anim_end)
+                        {
+                            //削除
+                            GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject);
+                            //ゲームオーバー
+                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+                        }
+                    }
                     else
                     {
                         if (_IsGround)  //常時アニメーション処理 : 通常時
@@ -133,8 +145,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 {                    
                     if (Out_Screen(gameObject)) //画面外に出た場合 : ゲームオーバー
                     {
-                        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
-                        GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject); //風船削除
+                        //GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+                        //GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject); //風船削除
                     }
                     Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Balloon_Normal_img[0], false); //オブジェクトの詳細設定
                     Gravity_Move(_Rigid2D, true);  //重力処理
@@ -252,11 +264,9 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 //スパイクボールとの当たり判定
                 if (collision.gameObject.name.Contains("SPIKE_BALL"))
                 {
-                    Debug.Log("トゲボールHIT");
-                    //クラッシュと同じ処理                                (仮)
-                    if (!_Is_Crash)
+                    if (!_Is_Spike)
                     {
-                        _Is_Crash = true;
+                        _Is_Spike = true;
                         _Anim_cnt = 0;
                         _Anim_index = 0;
                     }
@@ -476,17 +486,18 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 ground_pos.x += ground_rect.rect.width  *( dir.x * -1);
                 _Rect.transform.localPosition = ground_pos;             //落下座標に強制移動
 
-                _Rigid2D.velocity = Vector2.zero; //完全に止める
-
+                //衝突したオブジェクトの情報を取得
                 Obj_Gravity_Puzzle hit_obj = hit.collider.gameObject.GetComponent<Obj_Gravity_Puzzle>();
 
-                //box to box, box to splike, splike to box, splike to splike---------------------------------------------------------------------次回ここから
-                //同じオブジェクトの判定だった場合
-                if (_Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BOX && hit_obj._Obj_ID == _Obj_ID)
+                //着地フラグがあるオブジェクト同士の判定
+                if (Ground_Obj_Judge(this, hit_obj))
                 {
                     //当たったBOXの着地フラグがtrueの場合
                     if (hit_obj._IsGround == true)
+                    {
+                        _Rigid2D.velocity = Vector2.zero; //完全に止める
                         Ground_Process(); //着地時処理
+                    }
                 }
                 else
                     Ground_Process(); //着地時処理
@@ -496,6 +507,33 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         }
         else
             _IsGround = false;
+    }
+
+    /// <summary>
+    /// 着地フラグがあるオブジェクト同士の判定
+    /// </summary>
+    /// <param name="this_obj">オブジェクト</param>
+    /// <param name="hit_obj">衝突したオブジェクト</param>
+    /// <returns>判定の可否</returns>
+    private bool Ground_Obj_Judge(Obj_Gravity_Puzzle this_obj, Obj_Gravity_Puzzle hit_obj)
+    {
+        //BOX, SPIKE_BALL
+        if (this_obj._Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BOX || this_obj._Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL)
+        {
+            //BOX, SPIKE_BALL
+            if (hit_obj._Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BOX || hit_obj._Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL)
+            {
+                return true;
+            }
+        }
+        //BALLOON, BALLOON
+        else if (this_obj._Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON &&
+           hit_obj._Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

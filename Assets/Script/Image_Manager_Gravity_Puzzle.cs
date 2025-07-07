@@ -17,8 +17,10 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
     public Sprite[] _Player_Normal_img;
     [Header("キャラクターの落下アニメーション画像")]
     public Sprite[] _Player_Fall_img;
-    [Header("キャラクターのクラッシュアニメーション画像")]
+    [Header("キャラクターの箱との衝突アニメーション画像")]
     public Sprite[] _Player_Crash_img;
+    [Header("キャラクターのトゲとの衝突アニメーション画像")]
+    public Sprite[] _Player_Spike_img;
     [Header("風船の通常アニメーション画像")]
     public Sprite[] _Balloon_Normal_img;
 
