@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Common_Gravity_Puzzle;
+﻿using Common_Gravity_Puzzle;
 using UnityEditor;
 using UnityEngine;
 

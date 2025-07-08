@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 画面のアスペクト比の変更処理
@@ -12,7 +10,7 @@ public class Aspect_Keeper_Gravity_Puzzle : MonoBehaviour
     [SerializeField] private Camera Target_Camera;
 
     [Header("目的の画面解像度")]
-    public Vector2 Aspect_vec;//600*900
+    public Vector2 Aspect_vec;//555*900
 
     //変更前のスクリーンサイズ
     private int _Prev_Width = 0;
@@ -21,7 +19,7 @@ public class Aspect_Keeper_Gravity_Puzzle : MonoBehaviour
     void Update()
     {
         //画面サイズが変更された場合のみ、Viewportを更新
-        //if (_Prev_Width != Screen.width || _Prev_Height != Screen.height)
+        if (_Prev_Width != Screen.width || _Prev_Height != Screen.height)
             UpdateCameraViewport();
 
     }

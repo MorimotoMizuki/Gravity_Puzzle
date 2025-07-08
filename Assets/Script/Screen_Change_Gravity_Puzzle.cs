@@ -1,10 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 using Common_Gravity_Puzzle;
-using System;
 
 public class Screen_Change_Gravity_Puzzle : MonoBehaviour
 {

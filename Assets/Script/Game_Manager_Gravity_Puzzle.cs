@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 using Common_Gravity_Puzzle;
-using static Unity.Collections.AllocatorManager;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 
 public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 {

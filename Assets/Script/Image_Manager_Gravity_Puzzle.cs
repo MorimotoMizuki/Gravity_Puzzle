@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-
-using Common_Gravity_Puzzle;
 
 public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 {
