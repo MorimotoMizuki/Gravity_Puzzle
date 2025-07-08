@@ -108,6 +108,9 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
             //タイトル画面
             case GrovalConst_Gravity_Puzzle.Screen_ID.TITLE:
                 {
+                    //BGMを再生
+                    GrovalNum_Gravity_Puzzle.sMusicManager.BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.TITLE);
+
                     GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
                     GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL = 1; //ステージレベルを1にする
                     break;
@@ -115,6 +118,9 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
             //ゲーム画面
             case GrovalConst_Gravity_Puzzle.Screen_ID.GAME:
                 {
+                    //BGMを再生
+                    GrovalNum_Gravity_Puzzle.sMusicManager.BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.GAME);
+
                     GrovalNum_Gravity_Puzzle.sGameManager.Reset_Stage();  //ステージリセット
                     GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, true); //スタートボタン表示
@@ -147,6 +153,8 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
             //クリア画面
             case GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR:
                 {
+                    GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.GAMECLEAR); //SE再生 : BGM停止
+
                     GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
                     _Is_Judge_First = true;
                     break;

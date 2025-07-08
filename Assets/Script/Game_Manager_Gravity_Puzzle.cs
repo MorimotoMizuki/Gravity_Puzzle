@@ -91,7 +91,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             //ゲームプレイフェーズ
             case GrovalConst_Gravity_Puzzle.GameState.PLAYING:
                 {
-                    //Timer(); //タイマー
+                    Timer(); //タイマー
                     Flick_Permit();//フリック許可判定
                     Flick(); //フリック処理
                     break;
@@ -108,6 +108,10 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                 {
                     //ゲームオーバー時に表示するオブジェクトを表示
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_GameOver_obj, true);
+                    //SE再生
+                    GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.GAMEOVER);
+
+                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;
                     break;
                 }
         }
@@ -229,6 +233,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         if (_Balloon_cnt == _Balloon_sum && _Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.READY)
         {
             _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE;
+
+            GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.DOOR_MOVE); //SE再生
         }
     }
 
@@ -271,6 +277,8 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             GrovalConst_Gravity_Puzzle.Flick_ID flick_id = FlickDirection(dir);
             if (flick_id != _Flick_id && flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
             {
+                GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.GRAVITY_CHANGE); //SE再生
+
                 _Flick_id = flick_id;
                 //キャラクターの着地フラグなどを初期化
                 for(int i = 0; i < _Character_list.Count; i++)

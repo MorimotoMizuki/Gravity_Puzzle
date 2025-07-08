@@ -22,6 +22,28 @@ namespace Common_Gravity_Puzzle
         }
 
         /// <summary>
+        /// BGMのID
+        /// </summary>
+        public enum BGM_ID
+        {
+            TITLE,
+            GAME,
+        }
+
+        /// <summary>
+        /// SEのID
+        /// </summary>
+        public enum SE_ID
+        {
+            GAMECLEAR,
+            GAMEOVER,
+            GRAVITY_CHANGE,
+            BALLOON_GET,
+            DOOR_MOVE,
+            BUTTON_CLICK,
+        }
+
+        /// <summary>
         /// ボタンID
         /// </summary>
         public enum Button_ID
@@ -80,6 +102,7 @@ namespace Common_Gravity_Puzzle
             PLAYER_IN,
             DOOR_CLOSE,
             CLEAR,
+            END,
         }
 
     }
@@ -99,11 +122,12 @@ namespace Common_Gravity_Puzzle
         public static int gNOW_STAGE_LEVEL = 1;
 
         //各スクリプト
-        public static Game_Manager_Gravity_Puzzle sGameManager;
-        public static Game_Preference_Gravity_Puzzle sGamePreference;
-        public static Image_Manager_Gravity_Puzzle sImageManager;
-        public static Screen_Change_Gravity_Puzzle sScreenChange;
-        public static Click_Manager_Gravity_Puzzle sClickManager;
-        public static Csv_Roader_Gravity_Puzzle sCsvRoader;
+        public static Game_Manager_Gravity_Puzzle       sGameManager;
+        public static Game_Preference_Gravity_Puzzle    sGamePreference;
+        public static Image_Manager_Gravity_Puzzle      sImageManager;
+        public static Screen_Change_Gravity_Puzzle      sScreenChange;
+        public static Click_Manager_Gravity_Puzzle      sClickManager;
+        public static Csv_Roader_Gravity_Puzzle         sCsvRoader;
+        public static Music_Manager_Gravity_Puzzle      sMusicManager;
     }
 }

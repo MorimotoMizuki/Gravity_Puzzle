@@ -45,6 +45,7 @@ public class Click_Manager_Gravity_Puzzle : MonoBehaviour
                     //画面クリック判定
                     if(_Is_Touch_or_Click_down && _Is_Title_First)
                     {
+                        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BUTTON_CLICK); //SE再生
                         _Is_Title_Screen_Click = true;
                         _Is_Title_First = false;
                     }
@@ -89,26 +90,31 @@ public class Click_Manager_Gravity_Puzzle : MonoBehaviour
     public void Button_Clicked_Next()
     {
         _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.NEXT] = true;      //ボタンフラグtrue
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BUTTON_CLICK); //SE再生
     }
     //リプレイボタン : ゲームオーバー画面
     public void Button_Clicked_Replay()
     {
         _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.REPLAY] = true;    //ボタンフラグtrue
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BUTTON_CLICK); //SE再生
     }
     //タイトルボタン : ゲームオーバー画面
     public void Button_Clicked_Title()
     {
         _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.TITLE] = true;     //ボタンフラグtrue
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BUTTON_CLICK); //SE再生
     }
     //ギブアップボタン : ゲーム画面
     public void Button_Clicked_GiveUp()
     {
         _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP] = true;    //ボタンフラグtrue
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BUTTON_CLICK); //SE再生
     }
     //スタートボタン : ゲーム画面
     public void Button_Clicked_Start()
     {
         _Is_Button[(int)GrovalConst_Gravity_Puzzle.Button_ID.START] = true;     //ボタンフラグtrue
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BUTTON_CLICK); //SE再生
     }
 
     /// <summary>

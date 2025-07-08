@@ -12,6 +12,7 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     [SerializeField] private Screen_Change_Gravity_Puzzle screen_change;
     [SerializeField] private Click_Manager_Gravity_Puzzle click_manager;
     [SerializeField] private Csv_Roader_Gravity_Puzzle    csv_roder;
+    [SerializeField] private Music_Manager_Gravity_Puzzle music_manager;
 
     [Header("ステージの制限時間(秒)")]
     public int[] _Time;
@@ -38,12 +39,13 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GrovalNum_Gravity_Puzzle.sGamePreference = this;
-        GrovalNum_Gravity_Puzzle.sGameManager = game_manager;
-        GrovalNum_Gravity_Puzzle.sImageManager = image_manager;
-        GrovalNum_Gravity_Puzzle.sScreenChange = screen_change;
-        GrovalNum_Gravity_Puzzle.sClickManager = click_manager;
-        GrovalNum_Gravity_Puzzle.sCsvRoader = csv_roder;
+        GrovalNum_Gravity_Puzzle.sGamePreference    = this;
+        GrovalNum_Gravity_Puzzle.sGameManager       = game_manager;
+        GrovalNum_Gravity_Puzzle.sImageManager      = image_manager;
+        GrovalNum_Gravity_Puzzle.sScreenChange      = screen_change;
+        GrovalNum_Gravity_Puzzle.sClickManager      = click_manager;
+        GrovalNum_Gravity_Puzzle.sCsvRoader         = csv_roder;
+        GrovalNum_Gravity_Puzzle.sMusicManager      = music_manager;
 
         //60fpsに設定
         Application.targetFrameRate = 60;

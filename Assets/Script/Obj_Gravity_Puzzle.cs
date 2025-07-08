@@ -119,28 +119,16 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     {
                         bool _is_anim_end = Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Crash_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt);
                         if(_is_anim_end)
-                        {
-                            //削除
-                            GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject);
-                            //ゲームオーバー
-                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
-                        }
+                            MainCharacter_Died();
                     }
                     else if(_Is_Spike)
                     {
                         bool _is_anim_end = Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Spike_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt);
                         if (_is_anim_end)
-                        {
-                            //削除
-                            GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject);
-                            //ゲームオーバー
-                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
-                        }
+                            MainCharacter_Died();
                     }
                     else if(_Is_Goal)
-                    {
                         Goal_Move(); //ゴール処理
-                    }
                     else
                     {
                         if (_IsGround)  //常時アニメーション処理 : 通常時
@@ -224,9 +212,10 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     {
                         //風船の獲得数増やす
                         GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt++;
-                        Debug.Log(GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt);
                         //風船の削除
                         GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(collision.gameObject);
+
+                        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BALLOON_GET); //SE再生
 
                         GrovalNum_Gravity_Puzzle.sGameManager.Door_Judge();   //ドアの開閉判定
                         GrovalNum_Gravity_Puzzle.sGameManager.Dec_Mask_Alpha(); //マスク画像のアルファ値を減少させる
@@ -234,42 +223,20 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     //ドアとの衝突 : 開いている状態のドア
                     if (collision.gameObject.layer == LayerMask.NameToLayer("Door") && GrovalNum_Gravity_Puzzle.sGameManager._Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE)
                     {
-                        if (!_Is_Goal)
-                        {
-                            _Is_Goal = true;
-                            _Anim_cnt = 0;
-                            _Anim_index = 0;
-                        }
+                        _Is_Goal = Change_Animation(_Is_Goal); //アニメーション変更時処理
                     }
                     //箱との当たり判定
                     else if (collision.gameObject.layer == LayerMask.NameToLayer("Box_Died"))
                     {
-                        if (!_Is_Crash && _IsGround)
-                        {
-                            _Is_Crash = true;
-                            _Anim_cnt = 0;
-                            _Anim_index = 0;
-                        }
+                        if (_IsGround)
+                            _Is_Crash = Change_Animation(_Is_Crash); //アニメーション変更時処理
                     }
-                    //スパイクボールとの当たり判定
-                    else if (collision.gameObject.layer == LayerMask.NameToLayer("Spike_Ball"))
+                    //スパイクボールとトゲの当たり判定
+                    else if (collision.gameObject.layer == LayerMask.NameToLayer("Spike_Ball") ||
+                             collision.gameObject.layer == LayerMask.NameToLayer("Spike_Dir"))
                     {
-                        if (!_Is_Spike && _IsGround)
-                        {
-                            _Is_Spike = true;
-                            _Anim_cnt = 0;
-                            _Anim_index = 0;
-                        }
-                    }
-                    //トゲとの当たり判定
-                    else if (collision.gameObject.layer == LayerMask.NameToLayer("Spike_Dir"))
-                    {
-                        if (!_Is_Spike && _IsGround)
-                        {
-                            _Is_Spike = true;
-                            _Anim_cnt = 0;
-                            _Anim_index = 0;
-                        }
+                        if (_IsGround)
+                            _Is_Spike = Change_Animation(_Is_Spike); //アニメーション変更時処理
                     }
                     break;
                 }
@@ -301,15 +268,11 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
 
                         if (layer == LayerMask.NameToLayer("Spike_Ball"))
                         {
-                            _Is_Spike = true;
-                            _Anim_cnt = 0;
-                            _Anim_index = 0;
+                            _Is_Spike = Change_Animation(_Is_Spike); //アニメーション変更時処理
                         }
                         else if (layer == LayerMask.NameToLayer("Spike_Dir"))
                         {
-                            _Is_Spike = true;
-                            _Anim_cnt = 0;
-                            _Anim_index = 0;
+                            _Is_Spike = Change_Animation(_Is_Spike); //アニメーション変更時処理
                         }
                     }
                     dir.x *= -1;
@@ -321,12 +284,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
 
                         if (layer == LayerMask.NameToLayer("Box_Died"))
                         {
-                            if (!_Is_Crash)
-                            {
-                                _Is_Crash = true;
-                                _Anim_cnt = 0;
-                                _Anim_index = 0;
-                            }
+                            _Is_Crash = Change_Animation(_Is_Crash); //アニメーション変更時処理
                         }
                     }
                     break;
@@ -409,27 +367,21 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         switch(_Obj_ID)
         {
             case GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
-                {
-                    transform.SetAsLastSibling();//最前面に
-                    break;
-                }
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
-                {
-                    transform.SetAsLastSibling();//最前面に
-                    break;
-                }
-            case GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK:
-                {
-                    //矢印ブロックを非表示にする
-                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, false);
-                    //画像変更 : 上下左右ブロックの画像
-                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Block_img[(int)_Now_gravity_id]);
-                    break;
-                }
             case GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
-                {
-                    break;
-                }
+            case GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL:
+            {
+                transform.SetAsLastSibling();//最前面に表示
+                break;
+            }
+            case GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK:
+            {
+                //矢印ブロックを非表示にする
+                GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, false);
+                //画像変更 : 上下左右ブロックの画像
+                GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Block_img[(int)_Now_gravity_id]);
+                break;
+            }
         }
         _Is_setting = true;
     }
@@ -715,9 +667,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         switch (GrovalNum_Gravity_Puzzle.sGameManager._Goal_Stage)
         {
             case GrovalConst_Gravity_Puzzle.Goal_Stage.READY:
-                {
-                    break;
-                }
+            case GrovalConst_Gravity_Puzzle.Goal_Stage.END:
+                break;
             case GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE:
                 {
                     if (_Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.DOOR)
@@ -767,6 +718,10 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 {
                     //ゲームクリア判定
                     GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMECLEAR;
+
+                    GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.DOOR_MOVE); //SE再生
+
+                    GrovalNum_Gravity_Puzzle.sGameManager._Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.END;
                     break;
                 }
         }
@@ -817,5 +772,26 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             _Anim_cnt = 0;
         }
         return false;
+    }
+
+    /// <summary>
+    /// アニメーション変更時の変数のリセットなど
+    /// </summary>
+    /// <returns>対象のフラグ</returns>
+    private bool Change_Animation(bool flag)
+    {
+        if (flag) return flag;
+
+        _Anim_cnt = 0;
+        _Anim_index = 0;
+        return true;
+    }
+
+    private void MainCharacter_Died()
+    {
+        //削除
+        GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject);
+        //ゲームオーバー
+        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
     }
 }
