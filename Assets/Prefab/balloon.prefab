@@ -139,7 +139,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 25, y: 54.7}
+  m_Size: {x: 25, y: 50}
   m_Direction: 0
 --- !u!114 &6019918894959003
 MonoBehaviour:
@@ -160,7 +160,7 @@ MonoBehaviour:
     m_Bits: 320
   _HitLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 6144
   _IsGround: 0
   _Is_first_ground: 1
   _Block_Arrow: {fileID: 0}
@@ -233,5 +233,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 50, y: 54.7}
+  m_Size: {x: 25, y: 50}
   m_Direction: 0

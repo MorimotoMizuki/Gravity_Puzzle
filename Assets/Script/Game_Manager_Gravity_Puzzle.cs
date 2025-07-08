@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Common_Gravity_Puzzle;
 using static Unity.Collections.AllocatorManager;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 {
@@ -24,15 +25,18 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     [Header("ブロックの生成エリア : ブロックの親オブジェクト")]
     public RectTransform _Obj_area;
 
-    [HideInInspector] public int _Character_cnt = 0;        //着地判定のあるキャラクターの合計数
-    [HideInInspector] public int _Character_ground_cnt = 0; //着地したキャラクターの数
+    //[HideInInspector] public int _Character_cnt = 0;        //着地判定のあるキャラクターの合計数
+    //[HideInInspector] public int _Character_ground_cnt = 0; //着地したキャラクターの数
     [HideInInspector] public int _Balloon_sum = 0;          //風船の合計数
     [HideInInspector] public int _Balloon_cnt = 0;          //風船の獲得数
 
     //ドアのフェーズ状態
     [HideInInspector] public GrovalConst_Gravity_Puzzle.Goal_Stage _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.READY; 
 
-    [HideInInspector] public bool _Is_Flick;            //フリック許可フラグ
+    [HideInInspector] public bool _Is_Flick; //フリック許可フラグ
+
+    //キャラクターの配列
+    private List<Obj_Gravity_Puzzle> _Character_list = new List<Obj_Gravity_Puzzle>();
 
     //マップデータ
     private List<List<int>> _StageMap = new List<List<int>>();
@@ -154,10 +158,11 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         foreach (Transform child in _Obj_area)
             Delete_Obj(child.gameObject);
 
+        //キャラクターのリストの中身を全て削除
+        _Character_list.Clear();
+
         //初期化
         _BlockSize = 0.0f;
-        _Character_cnt = 0;
-        _Character_ground_cnt = 0;
         _Balloon_sum = 0;
         _Balloon_cnt = 0;
         _Name_index = 0;
@@ -190,13 +195,14 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER:
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.SPIKE_BALL:
-                            _Character_cnt++;   //着地判定のあるキャラクターの数
+                            _Character_list.Add(obj.GetComponent<Obj_Gravity_Puzzle>()); //キャラクターのリスト
                         break;
                         case (int)GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
-                            _Character_cnt++;   //着地判定のあるキャラクターの数
                             _Balloon_sum++;     //風船の数
-                        break;
+                            _Character_list.Add(obj.GetComponent<Obj_Gravity_Puzzle>()); //キャラクターのリスト
+                            break;
                     }
+
                     _Name_index++;
                 }
                 pos.x += _BlockSize;
@@ -220,8 +226,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     public void Door_Judge()
     {
-        if (_Balloon_cnt == _Balloon_sum &&
-            _Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.READY)
+        if (_Balloon_cnt == _Balloon_sum && _Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.READY)
         {
             _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE;
         }
@@ -267,20 +272,12 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             if (flick_id != _Flick_id && flick_id != GrovalConst_Gravity_Puzzle.Flick_ID.NONE)
             {
                 _Flick_id = flick_id;
-                _Character_ground_cnt = 0;
-                foreach (Transform child in _Obj_area)
+                //キャラクターの着地フラグなどを初期化
+                for(int i = 0; i < _Character_list.Count; i++)
                 {
-                    if (child.gameObject.name.Contains("BOX") ||
-                        child.gameObject.name.Contains("SPIKE_BALL") ||
-                        child.gameObject.name.Contains("BALLOON") ||
-                        child.gameObject.name.Contains("PLAYER"))
-                    {
-                        Obj_Gravity_Puzzle chile_obj = child.gameObject.GetComponent<Obj_Gravity_Puzzle>();
-                        chile_obj._IsGround = false;
-                        chile_obj._Is_first_ground = true;
-                    }
+                    _Character_list[i]._IsGround = false;
+                    _Character_list[i]._Is_first_ground = false;
                 }
-
             }
         }
     }
@@ -327,11 +324,17 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// </summary>
     private void Flick_Permit()
     {
-        //着地したキャラクターの数がキャラクターの合計数以上の場合はフリック許可
-        if (_Character_ground_cnt >= _Character_cnt)
-            _Is_Flick = true;
-        else
-            _Is_Flick = false;
+        //全てのキャラクターの着地フラグがtrueの場合(削除済みのオブジェクトを除く)はフリックを許可
+        for(int i = 0; i < _Character_list.Count; i++)
+        {
+            if (_Character_list[i]._IsGround == false && _Character_list[i] != null)
+            {
+                _Is_Flick = false;
+                return;
+            }
+        }
+
+        _Is_Flick = true;
     }
 
     #endregion ------------------------------------------------------------------------------------------------------------

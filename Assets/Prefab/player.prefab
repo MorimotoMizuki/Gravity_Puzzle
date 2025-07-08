@@ -69,7 +69,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 50, y: 54.7}
+  m_Size: {x: 50, y: 50}
   m_Direction: 0
 --- !u!1 &7505933379310802038
 GameObject:
@@ -166,7 +166,7 @@ MonoBehaviour:
   _AddRayDistance: 0
   _GroundLayer:
     serializedVersion: 2
-    m_Bits: 576
+    m_Bits: 2624
   _HitLayer:
     serializedVersion: 2
     m_Bits: 14336
@@ -233,5 +233,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 25, y: 54.7}
+  m_Size: {x: 25, y: 50}
   m_Direction: 0

@@ -709,9 +709,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.34475523
+    x: 0.34448573
     y: 0
-    width: 0.3104895
+    width: 0.31102854
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -965,7 +965,7 @@ MonoBehaviour:
   click_manager: {fileID: 862377473}
   csv_roder: {fileID: 1797616892}
   _Time: 3c0000003c0000003c0000003c0000003c000000
-  _First_Gravity_Dir: 0300000003000000030000000300000002000000
+  _First_Gravity_Dir: 0000000003000000030000000300000002000000
   _Max_Mask_Alpha: 0.85
   _Min_Mask_Alpha: 0.5
   _Judge_Screen_Latency: 1
