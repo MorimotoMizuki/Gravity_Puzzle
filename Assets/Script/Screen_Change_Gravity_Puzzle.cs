@@ -119,18 +119,27 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                     GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, true); //スタートボタン表示
 
-                    //ステージの制限時間設定
+                    int index = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1; //配列呼び出すインデクス
+                    int time = 60; //制限時間
+
+                    //時間が設定されている場合
+                    if (index < GrovalNum_Gravity_Puzzle.sGamePreference._Time.Length)
+                        time = GrovalNum_Gravity_Puzzle.sGamePreference._Time[index];
+
+                    //タイマーの時間を設定
+                    GrovalNum_Gravity_Puzzle.sGameManager.Set_Limit_Time(time);
+
+                    if (index < GrovalNum_Gravity_Puzzle.sImageManager._BackGround_img.Length)
                     {
-                        int index = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1; //配列呼び出すインデクス
-                        int time = 60; //制限時間
-
-                        //時間が設定されている場合
-                        if (index <= GrovalNum_Gravity_Puzzle.sGamePreference._Time.Length)
-                            time = GrovalNum_Gravity_Puzzle.sGamePreference._Time[index];
-
-                        //タイマーの時間を設定
-                        GrovalNum_Gravity_Puzzle.sGameManager.Set_Limit_Time(time);
+                        //背景画像設定
+                        for (int i = 0; i < GrovalNum_Gravity_Puzzle.sImageManager._BackGround_obj.Length; i++)
+                            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._BackGround_obj[i], GrovalNum_Gravity_Puzzle.sImageManager._BackGround_img[index]);
                     }
+
+                    //マスク画像設定
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj,GrovalNum_Gravity_Puzzle.sImageManager._Mask_img);
+                    //マスク画像のアルファ値を最大値に変更
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Alpha(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sGamePreference._Max_Mask_Alpha);
 
                     Debug.Log("ステージレベル" + GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL);
                     break;

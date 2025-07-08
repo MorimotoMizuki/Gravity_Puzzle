@@ -230,6 +230,9 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                         GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt++;
                         //風船の削除
                         GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(collision.gameObject);
+
+                        GrovalNum_Gravity_Puzzle.sGameManager.Door_Judge();   //ドアの開閉判定
+                        GrovalNum_Gravity_Puzzle.sGameManager.Dec_Mask_Alpha(); //マスク画像のアルファ値を減少させる
                     }
                     //ドアとの衝突 : 開いている状態のドア
                     if (collision.gameObject.name.Contains("DOOR") && GrovalNum_Gravity_Puzzle.sGameManager._Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE)
@@ -287,7 +290,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     //スパイクボールとの当たり判定
                     else if (collision.gameObject.name.Contains("SPIKE_BALL"))
                     {
-                        //if (_IsGround)
+                        if (_IsGround)
                         {
                             //着地判定のあるキャラクター合計を減らす
                             GrovalNum_Gravity_Puzzle.sGameManager._Character_cnt--;

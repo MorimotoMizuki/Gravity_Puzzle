@@ -16,6 +16,13 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     [Header("ステージの制限時間(秒)")]
     public int[] _Time;
 
+    [Header("ステージごとの初期の重力の方向")]
+    public GrovalConst_Gravity_Puzzle.Flick_ID[] _First_Gravity_Dir;
+
+    [Header("マスク画像の透明度の最大値と最小値")]
+    public float _Max_Mask_Alpha = 0.8f;
+    public float _Min_Mask_Alpha = 0.2f;
+
     [Header("ゲーム判定画面に遷移する待機時間(秒)")]
     public float _Judge_Screen_Latency = 1.0f;
 
@@ -24,12 +31,9 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     [Header("キャラクターのクラッシュアニメーション切り替えカウント")]
     public int _Character_CrashAnim_Change_cnt = 10;
 
-
     [Header("ブロックの矢印の回転スピード")]
     public float _BlockArrow_RotSpeed = 120.0f;
 
-    [Header("ステージごとの初期の重力の方向")]
-    public GrovalConst_Gravity_Puzzle.Flick_ID[] _First_Gravity_Dir;
 
     // Start is called before the first frame update
     void Start()

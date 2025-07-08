@@ -709,9 +709,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.35509878
+    x: 0.34475523
     y: 0
-    width: 0.28980246
+    width: 0.3104895
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -964,12 +964,14 @@ MonoBehaviour:
   screen_change: {fileID: 810493075}
   click_manager: {fileID: 862377473}
   csv_roder: {fileID: 1797616892}
-  _Time: 050000003c0000003c0000003c0000003c000000
+  _Time: 3c0000003c0000003c0000003c0000003c000000
+  _First_Gravity_Dir: 0300000003000000030000000300000002000000
+  _Max_Mask_Alpha: 0.85
+  _Min_Mask_Alpha: 0.5
   _Judge_Screen_Latency: 1
   _Character_Anim_Change_cnt: 30
   _Character_CrashAnim_Change_cnt: 10
   _BlockArrow_RotSpeed: 120
-  _First_Gravity_Dir: 0300000003000000030000000300000002000000
 --- !u!4 &654978819
 Transform:
   m_ObjectHideFlags: 0
@@ -2571,14 +2573,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cea5bee2bf8aaff4389047c2de419f36, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2625,6 +2627,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1fd1939ae912948b6c7dad25dc22a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _BackGround_img:
+  - {fileID: 21300000, guid: c9bbccfc3d5022d4797e381603da7b84, type: 3}
+  - {fileID: 21300000, guid: e34887cea79d59c408d305e0ad485f7c, type: 3}
+  - {fileID: 21300000, guid: 17729a98b7f9069479427221f3d4660d, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  _BackGround_obj:
+  - {fileID: 95940555}
+  - {fileID: 1359492407}
+  _Mask_img: {fileID: 21300000, guid: cea5bee2bf8aaff4389047c2de419f36, type: 3}
+  _Mask_obj: {fileID: 1865247346}
   _BlockBase_Img: {fileID: 21300000, guid: 20623531fe32e694f820ae6b8900bf10, type: 3}
   _Block_img:
   - {fileID: 21300000, guid: 4daecfb6da9f24f48af51b9c06db8b4e, type: 3}

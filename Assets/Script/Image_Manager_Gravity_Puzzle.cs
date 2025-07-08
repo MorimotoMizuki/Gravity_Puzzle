@@ -7,9 +7,18 @@ using Common_Gravity_Puzzle;
 
 public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 {
+    [Header("ステージの背景画像")]
+    public Sprite[] _BackGround_img;
+    [Header("ステージの背景画像オブジェクト")]
+    public Image[] _BackGround_obj;
+
+    [Header("マスク画像")]
+    public Sprite _Mask_img;
+    [Header("マスク画像オブジェクト")]
+    public Image _Mask_obj;
+
     [Header("ブロックのベース画像")]
     public Sprite _BlockBase_Img;
-
     [Header("ブロックの上下左右画像")]
     public Sprite[] _Block_img;
 
@@ -21,6 +30,7 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
     public Sprite[] _Player_Crash_img;
     [Header("キャラクターのトゲとの衝突アニメーション画像")]
     public Sprite[] _Player_Spike_img;
+
     [Header("風船の通常アニメーション画像")]
     public Sprite[] _Balloon_Normal_img;
 
@@ -73,5 +83,37 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 
         //画像変更
         change_img_obj.sprite = target_img;
+    }
+
+    /// <summary>
+    /// 画像のアルファ値変更
+    /// </summary>
+    /// <param name="change_img_obj">変更元オブジェクト</param>
+    /// <param name="alpha">アルファ値</param>
+    public void Change_Alpha(Image change_img_obj, float alpha)
+    {
+        //変更元のオブジェクトが無い場合は終了
+        if (change_img_obj == null) return;
+
+        //アルファ値を変更
+        Color color = change_img_obj.color;
+        color.a = alpha;
+        change_img_obj.color = color;
+    }
+
+    /// <summary>
+    /// 画像のアルファ値を減少させる
+    /// </summary>
+    /// <param name="change_img_obj">変更元オブジェクト</param>
+    /// <param name="dec_alpha">減少させるアルファ値</param>
+    public void Decrement_Alpha(Image change_img_obj, float dec_alpha)
+    {
+        //変更元のオブジェクトが無い場合は終了
+        if (change_img_obj == null) return;
+
+        //アルファ値を変更
+        Color color = change_img_obj.color;
+        color.a -= dec_alpha;
+        change_img_obj.color = color;
     }
 }

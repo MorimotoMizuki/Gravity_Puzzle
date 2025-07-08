@@ -88,7 +88,6 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             case GrovalConst_Gravity_Puzzle.GameState.PLAYING:
                 {
                     //Timer(); //タイマー
-                    Door_Judge();   //ドアの開閉判定
                     Flick_Permit();//フリック許可判定
                     Flick(); //フリック処理
                     break;
@@ -219,13 +218,26 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// <summary>
     /// ドアの開閉状態を判定
     /// </summary>
-    private void Door_Judge()
+    public void Door_Judge()
     {
         if (_Balloon_cnt == _Balloon_sum &&
             _Goal_Stage == GrovalConst_Gravity_Puzzle.Goal_Stage.READY)
         {
             _Goal_Stage = GrovalConst_Gravity_Puzzle.Goal_Stage.IMG_CHANGE;
         }
+    }
+
+    /// <summary>
+    /// マスク画像のアルファ値の減少
+    /// </summary>
+    public void Dec_Mask_Alpha()
+    {
+        //アルファ値の幅
+        float dec_alpha = GrovalNum_Gravity_Puzzle.sGamePreference._Max_Mask_Alpha - GrovalNum_Gravity_Puzzle.sGamePreference._Min_Mask_Alpha;
+        //減少するアルファ値を風船の合計数で割って求める
+        dec_alpha /= _Balloon_sum;
+        //マスク画像のアルファ値を減少させる
+        GrovalNum_Gravity_Puzzle.sImageManager.Decrement_Alpha(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, dec_alpha);
     }
 
     #region フリック関係 --------------------------------------------------------------------------------------------------
