@@ -16,11 +16,17 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     public int[] _Time;
 
     [Header("ステージごとの初期の重力の方向")]
-    public GrovalConst_Gravity_Puzzle.Flick_ID[] _First_Gravity_Dir;
+    public GrovalConst_Gravity_Puzzle.Gravity_ID[] _First_Gravity_Dir;
+
+    [Header("重力の速度")]
+    public float _Gravity_Speed = 6.0f;
 
     [Header("マスク画像の透明度の最大値と最小値")]
     public float _Max_Mask_Alpha = 0.8f;
     public float _Min_Mask_Alpha = 0.2f;
+
+    [Header("ブロックの矢印の回転スピード")]
+    public float _BlockArrow_RotSpeed = 120.0f;
 
     [Header("ゲーム判定画面に遷移する待機時間(秒)")]
     public float _Judge_Screen_Latency = 1.0f;
@@ -29,10 +35,6 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
     public int _Character_Anim_Change_cnt = 30;
     [Header("キャラクターのクラッシュアニメーション切り替えカウント")]
     public int _Character_CrashAnim_Change_cnt = 10;
-
-    [Header("ブロックの矢印の回転スピード")]
-    public float _BlockArrow_RotSpeed = 120.0f;
-
 
     // Start is called before the first frame update
     void Start()
@@ -47,11 +49,5 @@ public class Game_Preference_Gravity_Puzzle : MonoBehaviour
 
         //60fpsに設定
         Application.targetFrameRate = 60;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -44,12 +44,6 @@ public class Music_Manager_Gravity_Puzzle : MonoBehaviour
         BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.TITLE);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     #region BGM関係 -------------------------------------------------------------
 
     /// <summary>

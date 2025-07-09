@@ -3,20 +3,17 @@ using UnityEngine.UI;
 
 public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 {
-    [Header("ステージの背景画像")]
+    [Header("ステージの背景の画像, 画像オブジェクト")]
     public Sprite[] _BackGround_img;
-    [Header("ステージの背景画像オブジェクト")]
     public Image[] _BackGround_obj;
 
-    [Header("マスク画像")]
+    [Header("マスク画像, 画像オブジェクト")]
     public Sprite _Mask_img;
-    [Header("マスク画像オブジェクト")]
     public Image _Mask_obj;
 
-    [Header("ブロックのベース画像")]
+    [Header("ブロックのベース画像, 右左上下画像")]
     public Sprite _BlockBase_Img;
-    [Header("ブロックの上下左右画像")]
-    public Sprite[] _Block_img;
+    public Sprite[] _BlockDir_img;
 
     [Header("キャラクターの通常アニメーション画像")]
     public Sprite[] _Player_Normal_img;
@@ -44,18 +41,6 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 
     [Header("タイマー画像")]
     public Image _HP_Fill;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     /// <summary>
     /// オブジェクトの表示切り替え

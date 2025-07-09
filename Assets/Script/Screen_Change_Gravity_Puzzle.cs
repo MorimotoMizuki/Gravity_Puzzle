@@ -33,28 +33,15 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //タイトル画面クリック
-        if(GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click)
-        {
-            //表示非表示画面ID用
-            GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
-
-            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
-
-            //画面切り替え
-            if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
-                Screen_Change_Start(display_id, invisible_id, true);
-
-            GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click = false;
-        }
-
+        //画面クリック時処理
+        Clicked_Screen();
         //ボタンクリック時処理
         Clicked_Button();
-
         //ゲーム判定時処理
         Game_Judge_Screen();
     }
+
+    #region 画像切り替え --------------------------------------------------------------------------------------------------------------------------------------
 
     /// <summary>
     /// 画面切り替えのコルーチンを呼び出す関数
@@ -99,7 +86,7 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
         GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Screen_Canvas[(int)display_id].gameObject, true);    //画面表示
 
         GrovalNum_Gravity_Puzzle.gNOW_SCREEN_ID = display_id;      //現在の画面情報更新        
-        
+
         //現在表示されている画面
         switch (display_id)
         {
@@ -141,11 +128,9 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                     }
 
                     //マスク画像設定
-                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj,GrovalNum_Gravity_Puzzle.sImageManager._Mask_img);
+                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sImageManager._Mask_img);
                     //マスク画像のアルファ値を最大値に変更
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Alpha(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sGamePreference._Max_Mask_Alpha);
-
-                    Debug.Log("ステージレベル" + GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL);
                     break;
                 }
             //クリア画面
@@ -167,34 +152,101 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// フェードコルーチン
-    /// </summary>
-    /// <param name="from">現在の画面の alpha値</param>
-    /// <param name="to">最終的なの画面の alpha値</param>
-    /// <param name="color">フェードする色</param>
-    /// <returns>コルーチン用の IEnumerator</returns>
-    private IEnumerator Fade(float from, float to, Color color)
-    {
-        float timer = 0f; //経過時間の初期化
+    #endregion ------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //フェード時間中ループ
-        while (timer < _Fade_Speed)
+    #region 判定系 --------------------------------------------------------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// 画面クリック判定
+    /// </summary>
+    private void Clicked_Screen()
+    {
+        //タイトル画面クリック
+        if (GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click)
         {
-            float alpha = Mathf.Lerp(from, to, timer / _Fade_Speed);        //指定時間内でalpha値を補間            
-            _Fade_Img.color = new Color(color.r, color.g, color.b, alpha);  //補間したalpha値を用いて色を設定(rgbはそのままでalpha値のみ変更)           
-            timer += Time.deltaTime;                                        //経過時間を加算            
-            yield return null;                                              //1フレーム待機
+            //表示非表示画面ID用
+            GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
+
+            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
+
+            //画面切り替え
+            if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
+                Screen_Change_Start(display_id, invisible_id, true);
+
+            GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click = false;
         }
-        _Fade_Img.color = new Color(color.r, color.g, color.b, to);         //最終的な色を設定
     }
 
     /// <summary>
-    /// ゲーム判定画面遷移フラグtrue
+    /// ボタンクリック判定
     /// </summary>
-    private void Set_Is_Screen_Judge()
+    private void Clicked_Button()
     {
-        _Is_Screen_Judge = true;
+        //ボタンクリック
+        for (GrovalConst_Gravity_Puzzle.Button_ID i = GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP; i <= GrovalConst_Gravity_Puzzle.Button_ID.START; i++)
+        {
+            if (GrovalNum_Gravity_Puzzle.sClickManager._Is_Button[(int)i])
+            {
+                //表示非表示画面ID用
+                GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
+                switch (i)
+                {
+                    //スタートボタン
+                    case GrovalConst_Gravity_Puzzle.Button_ID.START:
+                        {
+                            //スタートボタン非表示
+                            GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, false);
+                            //ステージ生成フェーズへ
+                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.CREATING_STAGE;
+                            break;
+                        }
+                    //ギブアップボタン
+                    case GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP:
+                        {
+                            //スタートボタン非表示
+                            GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, false);
+                            //ゲームオーバー
+                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+                            break;
+                        }
+                    //ネクストボタン
+                    case GrovalConst_Gravity_Puzzle.Button_ID.NEXT:
+                        {
+                            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR;
+
+                            string index = $"stage{GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL + 1}";
+                            //マップデータにステージデータがあるかチェック
+                            if (GrovalNum_Gravity_Puzzle.sCsvRoader._MapData.ContainsKey(index))
+                                GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL++;             //ステージレベルアップ
+                            else
+                                display_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE; //タイトル画面へ
+                            break;
+                        }
+                    //リプレイボタン
+                    case GrovalConst_Gravity_Puzzle.Button_ID.REPLAY:
+                        {
+                            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            break;
+                        }
+                    //タイトルボタン
+                    case GrovalConst_Gravity_Puzzle.Button_ID.TITLE:
+                        {
+                            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
+                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            break;
+                        }
+                }
+                //画面切り替え
+                if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
+                    Screen_Change_Start(display_id, invisible_id, true);
+
+                //フラグfalse
+                GrovalNum_Gravity_Puzzle.sClickManager._Is_Button[(int)i] = false;
+            }
+        }
     }
 
     /// <summary>
@@ -227,63 +279,34 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     }
 
     /// <summary>
-    /// ボタンクリック時処理
+    /// ゲーム判定画面遷移フラグtrue
     /// </summary>
-    private void Clicked_Button()
+    private void Set_Is_Screen_Judge()
     {
-        //ボタンクリック
-        for (GrovalConst_Gravity_Puzzle.Button_ID i = GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP; i <= GrovalConst_Gravity_Puzzle.Button_ID.TITLE; i++)
+        _Is_Screen_Judge = true;
+    }
+
+    #endregion ------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// フェードコルーチン
+    /// </summary>
+    /// <param name="from">現在の画面の alpha値</param>
+    /// <param name="to">最終的なの画面の alpha値</param>
+    /// <param name="color">フェードする色</param>
+    /// <returns>コルーチン用の IEnumerator</returns>
+    private IEnumerator Fade(float from, float to, Color color)
+    {
+        float timer = 0f; //経過時間の初期化
+
+        //フェード時間中ループ
+        while (timer < _Fade_Speed)
         {
-            if (GrovalNum_Gravity_Puzzle.sClickManager._Is_Button[(int)i])
-            {
-                //表示非表示画面ID用
-                GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
-
-                switch (i)
-                {
-                    //ギブアップボタン
-                    case GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP:
-                        {
-                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
-                            break;
-                        }
-                    //ネクストボタン
-                    case GrovalConst_Gravity_Puzzle.Button_ID.NEXT:
-                        {
-                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR;
-
-                            string index = $"stage{GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL + 1}";
-                            //マップデータにステージデータがあるかチェック
-                            if (GrovalNum_Gravity_Puzzle.sCsvRoader._MapData.ContainsKey(index))
-                                GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL++;            //ステージレベルアップ
-                            else
-                                display_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;//タイトル画面へ
-
-                            break;
-                        }
-                    //リプレイボタン
-                    case GrovalConst_Gravity_Puzzle.Button_ID.REPLAY:
-                        {
-                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-                            break;
-                        }
-                    //タイトルボタン
-                    case GrovalConst_Gravity_Puzzle.Button_ID.TITLE:
-                        {
-                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
-                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-                            break;
-                        }
-                }
-
-                //画面切り替え
-                if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
-                    Screen_Change_Start(display_id, invisible_id, true);
-
-                GrovalNum_Gravity_Puzzle.sClickManager._Is_Button[(int)i] = false;
-            }
+            float alpha = Mathf.Lerp(from, to, timer / _Fade_Speed);        //指定時間内でalpha値を補間            
+            _Fade_Img.color = new Color(color.r, color.g, color.b, alpha);  //補間したalpha値を用いて色を設定(rgbはそのままでalpha値のみ変更)           
+            timer += Time.deltaTime;                                        //経過時間を加算            
+            yield return null;                                              //1フレーム待機
         }
+        _Fade_Img.color = new Color(color.r, color.g, color.b, to);         //最終的な色を設定
     }
 }
