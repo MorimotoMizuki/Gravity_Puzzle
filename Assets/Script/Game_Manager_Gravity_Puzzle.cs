@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using Common_Gravity_Puzzle;
+using System.Collections;
 
 public class Game_Manager_Gravity_Puzzle : MonoBehaviour
 {
@@ -41,12 +42,6 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     //タイマー関係
     private float _Limit_time;   //制限時間
     private float _Current_time; //残り時間
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -110,7 +105,10 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         else
             _Gravity_id = GrovalNum_Gravity_Puzzle.sGamePreference._First_Gravity_Dir[index_num];
 
-        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.PLAYING; //ゲームプレイフェーズへ
+        //カウントダウンスタート
+        StartCoroutine(Countdown());
+
+        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY; //待機フェーズへ
     }
 
     /// <summary>
@@ -300,6 +298,51 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         //タイマー(UI)に反映
         GrovalNum_Gravity_Puzzle.sImageManager._HP_Fill.fillAmount = Mathf.InverseLerp(0, _Limit_time, _Current_time);
         return false;
+    }
+
+    /// <summary>
+    /// カウントダウン
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Countdown()
+    {
+        int cnt = 3;
+        //カウントダウンオブジェクト表示
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sImageManager._Countdown_obj.gameObject, true);
+        //カウントダウン画像に変更
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Countdown_obj, GrovalNum_Gravity_Puzzle.sImageManager._Countdown_img[cnt - 1]);
+        //SE再生
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.COUNTDOWN);
+
+        while (cnt > 0)
+        {
+            //カウントダウン画像変更
+            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Countdown_obj, GrovalNum_Gravity_Puzzle.sImageManager._Countdown_img[cnt - 1]);
+            yield return StartCoroutine(WaitForFrames(60)); // 60フレーム待機
+            cnt--;
+        }
+        //スタート画像に変更
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Countdown_obj, GrovalNum_Gravity_Puzzle.sImageManager._Start_img);
+        yield return StartCoroutine(WaitForFrames(60));     // 60フレーム待機
+
+        //カウントダウンオブジェクト非表示
+        GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sImageManager._Countdown_obj.gameObject, false);
+
+        //ゲームプレイ可
+        GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.PLAYING;
+    }
+
+    /// <summary>
+    /// 指定したフレーム数待機
+    /// </summary>
+    /// <param name="frame_cnt">フレーム数</param>
+    /// <returns></returns>
+    IEnumerator WaitForFrames(int frame_cnt)
+    {
+        for (int i = 0; i < frame_cnt; i++)
+        {
+            yield return null; // 1フレーム待機
+        }
     }
 
     #endregion ------------------------------------------------------------------------------------------------------------

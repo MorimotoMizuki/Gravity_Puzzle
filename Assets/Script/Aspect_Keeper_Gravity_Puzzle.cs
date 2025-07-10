@@ -21,7 +21,6 @@ public class Aspect_Keeper_Gravity_Puzzle : MonoBehaviour
         //画面サイズが変更された場合のみ、Viewportを更新
         if (_Prev_Width != Screen.width || _Prev_Height != Screen.height)
             UpdateCameraViewport();
-
     }
 
     /// <summary>
@@ -45,7 +44,7 @@ public class Aspect_Keeper_Gravity_Puzzle : MonoBehaviour
             viewport_rect.y = 0.5f - viewport_rect.height * 0.5f;   //中央寄せ
         }
         //現在の画面サイズを保存
-        _Prev_Width = Screen.width;
+        _Prev_Width  = Screen.width;
         _Prev_Height = Screen.height;
 
         //カメラのViewportに適用

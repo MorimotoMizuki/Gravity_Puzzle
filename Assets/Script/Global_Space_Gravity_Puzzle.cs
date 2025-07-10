@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine.UIElements;
+﻿using System.Collections.Generic;
 
 namespace Common_Gravity_Puzzle
 {
@@ -29,7 +27,8 @@ namespace Common_Gravity_Puzzle
         };
 
         //レイヤー識別辞書
-        public static readonly Dictionary<Layer_ID, string> Layer_Name = new Dictionary<Layer_ID, string>
+        public static readonly Dictionary<Layer_ID, string> Layer_Name
+        = new Dictionary<Layer_ID, string>
         {
             {Layer_ID.GROUND,       "Ground" },
             {Layer_ID.PLAYER,       "Player" },
@@ -40,6 +39,9 @@ namespace Common_Gravity_Puzzle
             {Layer_ID.SPIKE_DIR,    "Spike_Dir" },
             {Layer_ID.BOX_DIED,     "Box_Died" },
         };
+
+        //ブロックの矢印の回転の誤差角度
+        public static readonly float ARROW_ROt_COMPLETE_THRSHOLD = 1.0f;
 
         /// <summary>
         /// 画面ID
@@ -73,6 +75,7 @@ namespace Common_Gravity_Puzzle
             BALLOON_GET,    //風船獲得時
             DOOR_MOVE,      //ドア開閉時
             BUTTON_CLICK,   //ボタンクリック時
+            COUNTDOWN,
         }
 
         /// <summary>

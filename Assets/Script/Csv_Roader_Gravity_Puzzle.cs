@@ -14,12 +14,6 @@ public class Csv_Roader_Gravity_Puzzle : MonoBehaviour
         _MapData = Road_Map_Date("Obj_Map");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>
     /// マップ読み込み
     /// </summary>
@@ -88,13 +82,11 @@ public class Csv_Roader_Gravity_Puzzle : MonoBehaviour
         //foreach (var stage in map_date_dict)
         //{
         //    Debug.Log($"▼ {stage.Key} のマップデータ");
-
         //    foreach (var row in stage.Value)
         //    {
         //        Debug.Log(string.Join(",", row)); // 1行のデータをカンマでつなげて表示
         //    }
         //}
-
         //foreach (var key in map_date_dict.Keys)
         //{
         //    Debug.Log($"{key} 値の数: {map_date_dict[key].Count}");
@@ -103,5 +95,4 @@ public class Csv_Roader_Gravity_Puzzle : MonoBehaviour
 
         return map_date_dict;
     }
-
 }

@@ -11,6 +11,13 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
     public Sprite _Mask_img;
     public Image _Mask_obj;
 
+    [Header("カウントダウン画像, 画像オブジェクト")]
+    public Sprite[] _Countdown_img;
+    public Image _Countdown_obj;
+
+    [Header("スタート画像")]
+    public Sprite _Start_img;
+
     [Header("ブロックのベース画像, 右左上下画像")]
     public Sprite _BlockBase_Img;
     public Sprite[] _BlockDir_img;
@@ -94,7 +101,7 @@ public class Image_Manager_Gravity_Puzzle : MonoBehaviour
 
         //アルファ値を変更
         Color color = change_img_obj.color;
-        color.a -= dec_alpha;
+        color.a = Mathf.Clamp01(color.a - dec_alpha); //0未満にならないようにする
         change_img_obj.color = color;
     }
 }

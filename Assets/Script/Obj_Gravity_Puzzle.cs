@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Drawing;
 using Common_Gravity_Puzzle;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +10,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     private Image           _Img;       //画像情報
     private BoxCollider2D   _Collider;  //コライダー情報
     private RectTransform   _Rect;      //RectTransform情報
-    private Rigidbody2D     _Rigid2D;   //Rigidbody2D情報
+    private Rigidbody2D     _Rigid2D;   //Rigidbody2D情報                                      
+    private Camera          _MainCamera;//カメラ
 
     //オブジェクトID
     private GrovalConst_Gravity_Puzzle.Obj_ID _Obj_ID;
@@ -55,7 +56,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     #region ブロック ------------------------------------------------------------------------------------------------------
     private enum Block_State
     {
-        READY, ROtATION, IMG_CHANGE,
+        READY, ROTATION, IMG_CHANGE,
     }
     //ブロックのフェーズ状態
     private Block_State _Block_State = Block_State.READY;
@@ -79,6 +80,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         _Collider   = GetComponent<BoxCollider2D>();
         _Rect       = GetComponent<RectTransform>();
         _Rigid2D    = GetComponent<Rigidbody2D>();
+        _MainCamera = Camera.main; //カメラ取得
     }
 
     // Update is called once per frame
@@ -96,26 +98,26 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
 
                 Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Player_Normal_img[0], false); //オブジェクトの詳細設定
                 Gravity_Move(_Rigid2D, false);  //重力処理
-                Player_Move();                  //プレイヤーの処理
+                Player_Move(); //プレイヤーの処理
             break;
             //風船
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
 
                 Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Balloon_Normal_img[0], false); //オブジェクトの詳細設定
-                Gravity_Move(_Rigid2D, true);   //重力処理
-                Balloon_Move();                 //風船の処理
+                Gravity_Move(_Rigid2D, true); //重力処理
+                Balloon_Move(); //風船の処理
             break;
             //ブロック
             case GrovalConst_Gravity_Puzzle.Obj_ID.BLOCK:
                
                 Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._BlockBase_Img, true); //オブジェクトの詳細設定
-                Block_Move();                   //ブロックの処理
+                Block_Move(); //ブロックの処理
             break;
             //ドア
             case GrovalConst_Gravity_Puzzle.Obj_ID.DOOR:
                
                 Obj_Setting(GrovalNum_Gravity_Puzzle.sImageManager._Door_img[0], true); //オブジェクトの詳細設定
-                Door_Move();                    //ドア処理
+                Door_Move(); //ドア処理
             break;
             //箱
             case GrovalConst_Gravity_Puzzle.Obj_ID.BOX:
@@ -180,15 +182,13 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             }
             case Player_Stage.CRASH:
             {
-                bool _is_anim_end = Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Crash_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt);
-                if (_is_anim_end)
+                if (Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Crash_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt))
                     MainCharacter_Died(); //キャラクター死亡時処理
                 break;
             }
             case Player_Stage.SPIKE:
             {
-                bool _is_anim_end = Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Spike_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt);
-                if (_is_anim_end)
+                if (Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Spike_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt))
                     MainCharacter_Died(); //キャラクター死亡時処理
                 break;
             }
@@ -222,12 +222,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(_Img, GrovalNum_Gravity_Puzzle.sImageManager._BlockBase_Img);
                     //矢印ブロックの表示
                     GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_Block_Arrow.gameObject, true);
-                    //角度
-                    Vector3 angle = _Block_Arrow.gameObject.transform.eulerAngles;
-
-                    angle.z = GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)_Now_gravity_id];
-
-                    _Block_Arrow.gameObject.transform.eulerAngles = angle;
+                    //角度設定
+                    _Block_Arrow.transform.eulerAngles = new Vector3(0.0f, 0.0f, GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)_Now_gravity_id]);
 
                     //回転の幅が90度を超えている場合 : 回転スピードを2倍にする
                     if (Mathf.DeltaAngle(_Block_Arrow.transform.eulerAngles.z, GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)GrovalNum_Gravity_Puzzle.sGameManager._Gravity_id]) > 90.0f)
@@ -235,12 +231,12 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     else
                         _Arrow_RotSpeed = GrovalNum_Gravity_Puzzle.sGamePreference._BlockArrow_RotSpeed;
 
-                    _Block_State = Block_State.ROtATION; //回転フェーズへ
+                    _Block_State = Block_State.ROTATION; //回転フェーズへ
                 }
                 break;
             }
             //回転フェーズ
-            case Block_State.ROtATION:
+            case Block_State.ROTATION:
             {
                 float currentAngle = _Block_Arrow.transform.eulerAngles.z;                                                          //現在の角度                    
                 float targetAngle = GrovalConst_Gravity_Puzzle.DIR_ANGLE[(int)GrovalNum_Gravity_Puzzle.sGameManager._Gravity_id];   //目的の角度                   
@@ -252,7 +248,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 _Block_Arrow.transform.Rotate(0f, 0f, rot_frame);
 
                 //一定範囲以内になったら完了とみなす（例：1度以内）
-                if (Mathf.Abs(angleDiff) < 1.0f)
+                if (Mathf.Abs(angleDiff) < GrovalConst_Gravity_Puzzle.ARROW_ROt_COMPLETE_THRSHOLD)
                 {
                     //角度をピタッと揃える（端数を切る）
                     Vector3 fixedAngle = _Block_Arrow.transform.eulerAngles;
@@ -352,13 +348,18 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// <returns>オブジェクトID</returns>
     private GrovalConst_Gravity_Puzzle.Obj_ID Obj_Identification()
     {
+        //Name_to_Obj_ID: 文字列（部分一致用）とオブジェクトIDのマッピング辞書
         foreach (var pair in GrovalConst_Gravity_Puzzle.Name_to_Obj_ID)
         {
+            //ゲームオブジェクトの名前に、辞書のキー（判別用文字列）が含まれているか確認
             if (gameObject.name.Contains(pair.Key))
             {
+                //一致した場合、対応するオブジェクトIDを返す
                 return pair.Value;
             }
         }
+
+        //どのキーとも一致しない場合、NONEを返す（未識別の意味）
         return GrovalConst_Gravity_Puzzle.Obj_ID.NONE;
     }
 
@@ -495,9 +496,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                             layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.SPIKE_DIR]))
                             _Player_Stage = Change_Animation(Player_Stage.SPIKE); //アニメーション変更時処理
                     }
-                    dir.x *= -1;
-                    dir.y *= -1;
-                    RaycastHit2D hit_up = Physics2D.Raycast(gameObject.transform.position, dir, _CheckDistance, _HitLayer);
+                    Vector2 inv_dir = -dir;
+                    RaycastHit2D hit_up = Physics2D.Raycast(gameObject.transform.position, inv_dir, _CheckDistance, _HitLayer);
                     if (hit_up.collider != null && hit_up.collider.gameObject != this.gameObject)
                     {
                         int layer = hit_up.collider.gameObject.layer;
@@ -509,7 +509,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                 }
             case GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON:
                 {
-                    RaycastHit2D hit_down = Physics2D.Raycast(gameObject.transform.position, dir, 0.4f, _HitLayer);
+                    RaycastHit2D hit_down = Physics2D.Raycast(gameObject.transform.position, dir, _AddRayDistance, _HitLayer);
                     if (hit_down.collider != null && hit_down.collider.gameObject != this.gameObject)
                     {
                         int layer = hit_down.collider.gameObject.layer;
@@ -614,6 +614,9 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
         _Rigid2D.velocity = Vector2.zero; //完全に止める
         _Rigid2D.constraints = RigidbodyConstraints2D.FreezeAll;//全て固定
 
+        if (_Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER && _Player_Stage != Player_Stage.GOAL)
+            Change_Animation(_Player_Stage, GrovalNum_Gravity_Puzzle.sGamePreference._Character_Anim_Change_cnt);
+
         _IsGround = true;
         _Is_first_ground = false;
     }
@@ -631,7 +634,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     {
         //targetUI（RectTransform）のワールド座標をカメラのビューポート座標に変換
         //ビューポート座標は (0,0) が画面左下、(1,1) が画面右上を示す
-        Vector3 viewport_pos = Camera.main.WorldToViewportPoint(target_obj.transform.position);
+        Vector3 viewport_pos = _MainCamera.WorldToViewportPoint(target_obj.transform.position);
 
         //ビューポート座標が 0～1 の範囲外であれば、画面外にあると判定
         if (viewport_pos.x < 0 || viewport_pos.x > 1 || viewport_pos.y < 0 || viewport_pos.y > 1)
@@ -660,9 +663,12 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// アニメーション変更時の変数のリセットなど
     /// </summary>
     /// <returns>対象のフラグ</returns>
-    private Player_Stage Change_Animation(Player_Stage stage)
+    private Player_Stage Change_Animation(Player_Stage stage, int anim_cnt = default)
     {
-        _Anim_cnt = 0;
+        if (anim_cnt == default)
+            anim_cnt = 0;
+
+        _Anim_cnt   = anim_cnt;
         _Anim_index = 0;
         return stage;
     }

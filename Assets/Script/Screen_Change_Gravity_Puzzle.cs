@@ -33,8 +33,6 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //画面クリック時処理
-        Clicked_Screen();
         //ボタンクリック時処理
         Clicked_Button();
         //ゲーム判定時処理
@@ -52,7 +50,8 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     public void Screen_Change_Start(GrovalConst_Gravity_Puzzle.Screen_ID display_id, GrovalConst_Gravity_Puzzle.Screen_ID invisible_id, bool is_fade)
     {
         //画面IDが未設定の場合は終了
-        if (display_id == GrovalConst_Gravity_Puzzle.Screen_ID.NONE || invisible_id == GrovalConst_Gravity_Puzzle.Screen_ID.NONE) return;
+        if (display_id == GrovalConst_Gravity_Puzzle.Screen_ID.NONE || invisible_id == GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
+            return;
 
         //コルーチン開始
         StartCoroutine(Screen_Change_Coroutine(display_id, invisible_id, is_fade));
@@ -92,56 +91,55 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
         {
             //タイトル画面
             case GrovalConst_Gravity_Puzzle.Screen_ID.TITLE:
-                {
-                    //BGMを再生
-                    GrovalNum_Gravity_Puzzle.sMusicManager.BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.TITLE);
+            {
+                //BGMを再生
+                GrovalNum_Gravity_Puzzle.sMusicManager.BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.TITLE);
 
-                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
-                    GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL = 1; //ステージレベルを1にする
-                    break;
-                }
+                GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
+                GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL = 1; //ステージレベルを1にする
+                break;
+            }
             //ゲーム画面
             case GrovalConst_Gravity_Puzzle.Screen_ID.GAME:
+            {
+                //BGMを再生
+                GrovalNum_Gravity_Puzzle.sMusicManager.BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.GAME);
+
+                GrovalNum_Gravity_Puzzle.sGameManager.Reset_Stage();  //ステージリセット                                                                 
+                GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.CREATING_STAGE; //ステージ生成フェーズへ
+
+                int index = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1; //配列呼び出すインデクス
+                int time = 60; //制限時間
+
+                //時間が設定されている場合
+                if (index < GrovalNum_Gravity_Puzzle.sGamePreference._Time.Length)
+                    time = GrovalNum_Gravity_Puzzle.sGamePreference._Time[index];
+
+                //タイマーの時間を設定
+                GrovalNum_Gravity_Puzzle.sGameManager.Set_Limit_Time(time);
+
+                if (index < GrovalNum_Gravity_Puzzle.sImageManager._BackGround_img.Length)
                 {
-                    //BGMを再生
-                    GrovalNum_Gravity_Puzzle.sMusicManager.BGM_Change(GrovalConst_Gravity_Puzzle.BGM_ID.GAME);
-
-                    GrovalNum_Gravity_Puzzle.sGameManager.Reset_Stage();  //ステージリセット
-                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
-                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, true); //スタートボタン表示
-
-                    int index = GrovalNum_Gravity_Puzzle.gNOW_STAGE_LEVEL - 1; //配列呼び出すインデクス
-                    int time = 60; //制限時間
-
-                    //時間が設定されている場合
-                    if (index < GrovalNum_Gravity_Puzzle.sGamePreference._Time.Length)
-                        time = GrovalNum_Gravity_Puzzle.sGamePreference._Time[index];
-
-                    //タイマーの時間を設定
-                    GrovalNum_Gravity_Puzzle.sGameManager.Set_Limit_Time(time);
-
-                    if (index < GrovalNum_Gravity_Puzzle.sImageManager._BackGround_img.Length)
-                    {
-                        //背景画像設定
-                        for (int i = 0; i < GrovalNum_Gravity_Puzzle.sImageManager._BackGround_obj.Length; i++)
-                            GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._BackGround_obj[i], GrovalNum_Gravity_Puzzle.sImageManager._BackGround_img[index]);
-                    }
-
-                    //マスク画像設定
-                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sImageManager._Mask_img);
-                    //マスク画像のアルファ値を最大値に変更
-                    GrovalNum_Gravity_Puzzle.sImageManager.Change_Alpha(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sGamePreference._Max_Mask_Alpha);
-                    break;
+                    //背景画像設定
+                    for (int i = 0; i < GrovalNum_Gravity_Puzzle.sImageManager._BackGround_obj.Length; i++)
+                        GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._BackGround_obj[i], GrovalNum_Gravity_Puzzle.sImageManager._BackGround_img[index]);
                 }
+
+                //マスク画像設定
+                GrovalNum_Gravity_Puzzle.sImageManager.Change_Image(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sImageManager._Mask_img);
+                //マスク画像のアルファ値を最大値に変更
+                GrovalNum_Gravity_Puzzle.sImageManager.Change_Alpha(GrovalNum_Gravity_Puzzle.sImageManager._Mask_obj, GrovalNum_Gravity_Puzzle.sGamePreference._Max_Mask_Alpha);
+                break;
+            }
             //クリア画面
             case GrovalConst_Gravity_Puzzle.Screen_ID.CLEAR:
-                {
-                    GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.GAMECLEAR); //SE再生 : BGM停止
+            {
+                GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.GAMECLEAR); //SE再生 : BGM停止
 
-                    GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
-                    _Is_Judge_First = true;
-                    break;
-                }
+                GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;//待機フェーズ
+                _Is_Judge_First = true;
+                break;
+            }
         }
 
         if (is_fade)
@@ -155,29 +153,6 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
     #endregion ------------------------------------------------------------------------------------------------------------------------------------------------
 
     #region 判定系 --------------------------------------------------------------------------------------------------------------------------------------------
-
-    /// <summary>
-    /// 画面クリック判定
-    /// </summary>
-    private void Clicked_Screen()
-    {
-        //タイトル画面クリック
-        if (GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click)
-        {
-            //表示非表示画面ID用
-            GrovalConst_Gravity_Puzzle.Screen_ID display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.NONE,
-                                                 invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
-
-            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
-            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
-
-            //画面切り替え
-            if (display_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE && invisible_id != GrovalConst_Gravity_Puzzle.Screen_ID.NONE)
-                Screen_Change_Start(display_id, invisible_id, true);
-
-            GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click = false;
-        }
-    }
 
     /// <summary>
     /// ボタンクリック判定
@@ -196,17 +171,16 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                     //スタートボタン
                     case GrovalConst_Gravity_Puzzle.Button_ID.START:
                         {
-                            //スタートボタン非表示
-                            GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, false);
-                            //ステージ生成フェーズへ
-                            GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.CREATING_STAGE;
+                            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+                            invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
                             break;
                         }
                     //ギブアップボタン
                     case GrovalConst_Gravity_Puzzle.Button_ID.GIVEUP:
                         {
-                            //スタートボタン非表示
-                            GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(GrovalNum_Gravity_Puzzle.sGameManager._Start_Button_obj, false);
+                            //プレイ中以外は終了
+                            if (GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE != GrovalConst_Gravity_Puzzle.GameState.PLAYING)
+                                break;
                             //ゲームオーバー
                             GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
                             break;
