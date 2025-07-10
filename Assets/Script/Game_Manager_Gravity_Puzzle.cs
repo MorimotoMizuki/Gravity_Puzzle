@@ -70,7 +70,6 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
             case GrovalConst_Gravity_Puzzle.GameState.GAMEOVER:         //ゲームオーバーフェーズ             
 
                 GrovalNum_Gravity_Puzzle.sImageManager.Change_Active(_GameOver_obj, true);      //ゲームオーバー時に表示するオブジェクトを表示
-                GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.GAMEOVER); //SE再生
                 GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.READY;               //待機フェーズへ
             break;
         }
@@ -378,7 +377,6 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
         if (_Balloon_cnt == _Balloon_sum && _Goal_Stage == GrovalConst_Gravity_Puzzle.Door_Stage.READY)
         {
             _Goal_Stage = GrovalConst_Gravity_Puzzle.Door_Stage.IMG_CHANGE; //ゴール時のフェーズ状態 を 画像変更フェーズへ
-            GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.DOOR_MOVE); //SE再生
         }
     }
 }

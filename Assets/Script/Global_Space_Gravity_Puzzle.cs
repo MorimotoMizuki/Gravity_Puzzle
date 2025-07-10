@@ -75,7 +75,9 @@ namespace Common_Gravity_Puzzle
             BALLOON_GET,    //風船獲得時
             DOOR_MOVE,      //ドア開閉時
             BUTTON_CLICK,   //ボタンクリック時
-            COUNTDOWN,
+            COUNTDOWN,      //カウントダウン時
+            HIT_SPIKE,      //トゲ衝突時
+            HIT_BOX,        //箱衝突時
         }
 
         /// <summary>

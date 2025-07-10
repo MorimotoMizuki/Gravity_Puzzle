@@ -181,6 +181,8 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
                             //プレイ中以外は終了
                             if (GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE != GrovalConst_Gravity_Puzzle.GameState.PLAYING)
                                 break;
+
+                            GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(GrovalConst_Gravity_Puzzle.SE_ID.GAMEOVER); //SE再生
                             //ゲームオーバー
                             GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
                             break;

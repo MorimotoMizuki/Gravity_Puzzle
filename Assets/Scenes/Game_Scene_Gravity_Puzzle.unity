@@ -448,11 +448,13 @@ MonoBehaviour:
   se_clip:
   - {fileID: 8300000, guid: 45c097e79f372c7449b791d21a775661, type: 3}
   - {fileID: 8300000, guid: e34f598062a39e245aea240a508f2603, type: 3}
-  - {fileID: 8300000, guid: 8aba85a5f8c5e8e459f6f7a5dc95204a, type: 3}
-  - {fileID: 8300000, guid: 2247dacfc594eb44f87c1ca96d197a4f, type: 3}
+  - {fileID: 8300000, guid: 97565f2773ee2a0488c6e6745c7c467f, type: 3}
+  - {fileID: 8300000, guid: 9842b1b87f69b1d42a422c9ec042c9b3, type: 3}
   - {fileID: 8300000, guid: 0c280785730d67c43a8c6e728fb01084, type: 3}
   - {fileID: 8300000, guid: 832d6fe6c08afaf4caaeb5d495bfd76b, type: 3}
   - {fileID: 8300000, guid: 8e5c093c17823a14180da46c4279c2f5, type: 3}
+  - {fileID: 8300000, guid: c74c5b4c4877d52459d0560fc5d93905, type: 3}
+  - {fileID: 8300000, guid: 72b0b91d69b88604c943d2f9cf6e7bb0, type: 3}
   se_volume:
   - 0.5
   - 0.5
@@ -971,9 +973,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.36624694
+    x: 0.35956317
     y: 0
-    width: 0.2675061
+    width: 0.28087363
     height: 1
   near clip plane: 0.3
   far clip plane: 1000

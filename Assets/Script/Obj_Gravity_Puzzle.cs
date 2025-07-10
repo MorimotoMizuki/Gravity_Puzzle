@@ -183,13 +183,13 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             case Player_Stage.CRASH:
             {
                 if (Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Crash_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt))
-                    MainCharacter_Died(); //キャラクター死亡時処理
+                    MainCharacter_Died(GrovalConst_Gravity_Puzzle.SE_ID.HIT_BOX); //キャラクター死亡時処理
                 break;
             }
             case Player_Stage.SPIKE:
             {
                 if (Short_Animation(_Img, GrovalNum_Gravity_Puzzle.sImageManager._Player_Spike_img, GrovalNum_Gravity_Puzzle.sGamePreference._Character_CrashAnim_Change_cnt))
-                    MainCharacter_Died(); //キャラクター死亡時処理
+                    MainCharacter_Died(GrovalConst_Gravity_Puzzle.SE_ID.HIT_SPIKE); //キャラクター死亡時処理
                 break;
             }
         }
@@ -471,7 +471,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             {
                 //箱との当たり判定
                 if (collision.gameObject.layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.BOX_DIED]))
-                    MainCharacter_Died(); //キャラクター死亡時処理
+                    MainCharacter_Died(GrovalConst_Gravity_Puzzle.SE_ID.HIT_BOX); //キャラクター死亡時処理
                 break;
             }
         }
@@ -516,7 +516,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                         //スパイクボールとトゲ
                         if (layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.SPIKE_BALL]) ||
                             layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.SPIKE_DIR]))
-                            MainCharacter_Died(); //キャラクター死亡時処理
+                            MainCharacter_Died(GrovalConst_Gravity_Puzzle.SE_ID.HIT_SPIKE); //キャラクター死亡時処理
                     }
                     break;
                 }
@@ -650,7 +650,7 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     {
         //プレイヤー, 風船の場合
         if (_Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.PLAYER || _Obj_ID == GrovalConst_Gravity_Puzzle.Obj_ID.BALLOON)
-            MainCharacter_Died(); //キャラクター死亡時処理
+            MainCharacter_Died(GrovalConst_Gravity_Puzzle.SE_ID.GAMEOVER); //キャラクター死亡時処理
         else
             GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject); //オブジェクト削除
     }
@@ -792,11 +792,16 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// <summary>
     /// キャラクター死亡時処理
     /// </summary>
-    private void MainCharacter_Died()
+    private void MainCharacter_Died(GrovalConst_Gravity_Puzzle.SE_ID  se_id = default)
     {
         //削除
         GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(gameObject);
         //ゲームオーバー
         GrovalNum_Gravity_Puzzle.gNOW_GAMESTATE = GrovalConst_Gravity_Puzzle.GameState.GAMEOVER;
+
+        if (se_id == default)
+            return;
+
+        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play_BGM_Stop(se_id); //SE再生
     }
 }
