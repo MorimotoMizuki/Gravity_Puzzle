@@ -165,9 +165,10 @@ public class Screen_Change_Gravity_Puzzle : MonoBehaviour
         if (GrovalNum_Gravity_Puzzle.sClickManager._Is_Title_Screen_Click)
         {
             //表示非表示画面ID用
-            GrovalConst_Gravity_Puzzle.Screen_ID display_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE, invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
+            GrovalConst_Gravity_Puzzle.Screen_ID display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.NONE,
+                                                 invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.NONE;
 
-            display_id = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
+            display_id   = GrovalConst_Gravity_Puzzle.Screen_ID.GAME;
             invisible_id = GrovalConst_Gravity_Puzzle.Screen_ID.TITLE;
 
             //画面切り替え
