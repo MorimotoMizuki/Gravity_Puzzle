@@ -352,6 +352,7 @@ public class Game_Manager_Gravity_Puzzle : MonoBehaviour
     /// <param name="target_obj">対象のゲームオブジェクト</param>
     public void Delete_Obj(GameObject target_obj)
     {
+        Debug.Log("削除" + target_obj.name);
         Destroy(target_obj);
     }
 
