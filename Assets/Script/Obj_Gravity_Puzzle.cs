@@ -165,8 +165,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
             Hit_Ray_Judge(_Gravity_Dir); //レイキャストの当たり判定
         _PrevIsGround = _IsGround;
 
-        if (!_IsGround)
-            Hit_Balloon(_Gravity_Dir);
+        //if (!_IsGround)
+        //    Hit_Balloon(_Gravity_Dir);
 
         switch (_Player_Stage)
         {
@@ -445,6 +445,8 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
                     GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BALLOON_GET); //SE再生
                     GrovalNum_Gravity_Puzzle.sGameManager.Door_Judge();     //ドアの開閉判定
                     GrovalNum_Gravity_Puzzle.sGameManager.Dec_Mask_Alpha(); //マスク画像のアルファ値を減少させる
+
+                        Debug.Log("風船ゲット");
                 }
                 //ドアとの衝突 : 開いている状態のドア
                 if (collision.gameObject.layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.DOOR]) && 
@@ -532,22 +534,24 @@ public class Obj_Gravity_Puzzle : MonoBehaviour
     /// <param name="dir">重力の方向</param>
     private void Hit_Balloon(Vector2 dir)
     {
-        RaycastHit2D hit_down = Physics2D.Raycast(gameObject.transform.position, dir, _CheckDistance, _HitLayer);
-        if (hit_down.collider != null && hit_down.collider.gameObject != this.gameObject)
-        {
-            int layer = hit_down.collider.gameObject.layer;
-            if (layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.BALLOON]))
-            {
-                //風船の獲得数増やす
-                GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt++;
-                //風船の削除
-                GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(hit_down.collider.gameObject);
+        //RaycastHit2D hit_down = Physics2D.Raycast(gameObject.transform.position, dir, _CheckDistance, _HitLayer);
+        //if (hit_down.collider != null && hit_down.collider.gameObject != this.gameObject)
+        //{
+        //    int layer = hit_down.collider.gameObject.layer;
+        //    if (layer == LayerMask.NameToLayer(GrovalConst_Gravity_Puzzle.Layer_Name[GrovalConst_Gravity_Puzzle.Layer_ID.BALLOON]))
+        //    {
+        //        //風船の獲得数増やす
+        //        GrovalNum_Gravity_Puzzle.sGameManager._Balloon_cnt++;
+        //        //風船の削除
+        //        GrovalNum_Gravity_Puzzle.sGameManager.Delete_Obj(hit_down.collider.gameObject);
 
-                GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BALLOON_GET); //SE再生
-                GrovalNum_Gravity_Puzzle.sGameManager.Door_Judge();     //ドアの開閉判定
-                GrovalNum_Gravity_Puzzle.sGameManager.Dec_Mask_Alpha(); //マスク画像のアルファ値を減少させる
-            }
-        }
+        //        GrovalNum_Gravity_Puzzle.sMusicManager.SE_Play(GrovalConst_Gravity_Puzzle.SE_ID.BALLOON_GET); //SE再生
+        //        GrovalNum_Gravity_Puzzle.sGameManager.Door_Judge();     //ドアの開閉判定
+        //        GrovalNum_Gravity_Puzzle.sGameManager.Dec_Mask_Alpha(); //マスク画像のアルファ値を減少させる
+
+        //        Debug.Log("風船ゲット_レイキャスト");
+        //    }
+        //}
     }
 
     #endregion ------------------------------------------------------------------------------------------------------------
